@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CloudDetection</string>
+    <string name="location_err">位置获取失败</string>
 </resources>

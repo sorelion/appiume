@@ -1,10 +1,12 @@
 package com.cmit.clouddetection.activity;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,6 +19,8 @@ import com.cmit.clouddetection.fragment.AboutFragment;
 import com.cmit.clouddetection.fragment.AppFragment;
 import com.cmit.clouddetection.fragment.DebugFragment;
 import com.cmit.clouddetection.fragment.MainFragment;
+import com.cmit.clouddetection.service.ObtainTaskService;
+import com.cmit.clouddetection.service.UploadMachineInfoService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout mTabPhoneBtn2;
     private LinearLayout mTabAboutBtn2;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +70,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initFragment();
         ininListener();
         setCurrentItem(MAIN_FRAGMENT);
+        registerService();
+    }
+
+    private void registerService() {
+        //开启上传手机信息服务
+//        startService(new Intent(this, UploadMachineInfoService.class));
+        //开启获取任务服务
+        startService(new Intent(this, ObtainTaskService.class));
     }
 
     private void ininListener() {
@@ -167,4 +180,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
+
 }
