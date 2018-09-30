@@ -52,9 +52,9 @@ public class ObtainTaskRunnable implements Runnable {
         SimpleDateFormat sdf_key = new SimpleDateFormat("yyyyMMddHHmmss");
         maps.put("data", new Gson().toJson(requestData));
         maps.put("time", sdf_key.format(new Date()));
-        maps.put("key",encodeIMEI( sdf_key.format(new Date()),SystemUtils.getImei()));
+        maps.put("key", encodeIMEI(sdf_key.format(new Date()), SystemUtils.getImei()));
         machineInfoService.getTaskTest(maps)
-//                .subscribeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<String>() {
                     @Override
