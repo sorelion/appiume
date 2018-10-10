@@ -20,8 +20,6 @@ import com.cmit.clouddetection.fragment.AppFragment;
 import com.cmit.clouddetection.fragment.DebugFragment;
 import com.cmit.clouddetection.fragment.MainFragment;
 import com.cmit.clouddetection.service.ObtainTaskService;
-import com.cmit.clouddetection.service.UploadMachineInfoService;
-
 import java.util.ArrayList;
 import java.util.List;
 

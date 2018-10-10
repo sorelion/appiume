@@ -15,7 +15,7 @@ import com.cmit.clouddetection.entry.ScriptDetails;
 /** 
  * DAO for table "SCRIPT_DETAILS".
 */
-public class ScriptDetailsDao extends AbstractDao<ScriptDetails, Void> {
+public class ScriptDetailsDao extends AbstractDao<ScriptDetails, Long> {
 
     public static final String TABLENAME = "SCRIPT_DETAILS";
 
@@ -24,12 +24,13 @@ public class ScriptDetailsDao extends AbstractDao<ScriptDetails, Void> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property StepId = new Property(0, String.class, "stepId", false, "STEP_ID");
-        public final static Property SerialNum = new Property(1, String.class, "serialNum", false, "SERIAL_NUM");
-        public final static Property OperateType = new Property(2, String.class, "operateType", false, "OPERATE_TYPE");
-        public final static Property ParamValue = new Property(3, String.class, "paramValue", false, "PARAM_VALUE");
-        public final static Property SuccessKeyword = new Property(4, String.class, "successKeyword", false, "SUCCESS_KEYWORD");
-        public final static Property IsTimeStamp = new Property(5, int.class, "isTimeStamp", false, "IS_TIME_STAMP");
+        public final static Property Id = new Property(0, Long.class, "id", true, "ID");
+        public final static Property StepId = new Property(1, String.class, "stepId", false, "STEP_ID");
+        public final static Property SerialNum = new Property(2, String.class, "serialNum", false, "SERIAL_NUM");
+        public final static Property OperateType = new Property(3, String.class, "operateType", false, "OPERATE_TYPE");
+        public final static Property ParamValue = new Property(4, String.class, "paramValue", false, "PARAM_VALUE");
+        public final static Property SuccessKeyword = new Property(5, String.class, "successKeyword", false, "SUCCESS_KEYWORD");
+        public final static Property IsTimeStamp = new Property(6, int.class, "isTimeStamp", false, "IS_TIME_STAMP");
     }
 
 
@@ -45,12 +46,13 @@ public class ScriptDetailsDao extends AbstractDao<ScriptDetails, Void> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"SCRIPT_DETAILS\" (" + //
-                "\"STEP_ID\" TEXT," + // 0: stepId
-                "\"SERIAL_NUM\" TEXT," + // 1: serialNum
-                "\"OPERATE_TYPE\" TEXT," + // 2: operateType
-                "\"PARAM_VALUE\" TEXT," + // 3: paramValue
-                "\"SUCCESS_KEYWORD\" TEXT," + // 4: successKeyword
-                "\"IS_TIME_STAMP\" INTEGER NOT NULL );"); // 5: isTimeStamp
+                "\"ID\" INTEGER PRIMARY KEY ," + // 0: id
+                "\"STEP_ID\" TEXT," + // 1: stepId
+                "\"SERIAL_NUM\" TEXT," + // 2: serialNum
+                "\"OPERATE_TYPE\" TEXT," + // 3: operateType
+                "\"PARAM_VALUE\" TEXT," + // 4: paramValue
+                "\"SUCCESS_KEYWORD\" TEXT," + // 5: successKeyword
+                "\"IS_TIME_STAMP\" INTEGER NOT NULL );"); // 6: isTimeStamp
     }
 
     /** Drops the underlying database table. */
@@ -63,107 +65,122 @@ public class ScriptDetailsDao extends AbstractDao<ScriptDetails, Void> {
     protected final void bindValues(DatabaseStatement stmt, ScriptDetails entity) {
         stmt.clearBindings();
  
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
+ 
         String stepId = entity.getStepId();
         if (stepId != null) {
-            stmt.bindString(1, stepId);
+            stmt.bindString(2, stepId);
         }
  
         String serialNum = entity.getSerialNum();
         if (serialNum != null) {
-            stmt.bindString(2, serialNum);
+            stmt.bindString(3, serialNum);
         }
  
         String operateType = entity.getOperateType();
         if (operateType != null) {
-            stmt.bindString(3, operateType);
+            stmt.bindString(4, operateType);
         }
  
         String paramValue = entity.getParamValue();
         if (paramValue != null) {
-            stmt.bindString(4, paramValue);
+            stmt.bindString(5, paramValue);
         }
  
         String successKeyword = entity.getSuccessKeyword();
         if (successKeyword != null) {
-            stmt.bindString(5, successKeyword);
+            stmt.bindString(6, successKeyword);
         }
-        stmt.bindLong(6, entity.getIsTimeStamp());
+        stmt.bindLong(7, entity.getIsTimeStamp());
     }
 
     @Override
     protected final void bindValues(SQLiteStatement stmt, ScriptDetails entity) {
         stmt.clearBindings();
  
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
+ 
         String stepId = entity.getStepId();
         if (stepId != null) {
-            stmt.bindString(1, stepId);
+            stmt.bindString(2, stepId);
         }
  
         String serialNum = entity.getSerialNum();
         if (serialNum != null) {
-            stmt.bindString(2, serialNum);
+            stmt.bindString(3, serialNum);
         }
  
         String operateType = entity.getOperateType();
         if (operateType != null) {
-            stmt.bindString(3, operateType);
+            stmt.bindString(4, operateType);
         }
  
         String paramValue = entity.getParamValue();
         if (paramValue != null) {
-            stmt.bindString(4, paramValue);
+            stmt.bindString(5, paramValue);
         }
  
         String successKeyword = entity.getSuccessKeyword();
         if (successKeyword != null) {
-            stmt.bindString(5, successKeyword);
+            stmt.bindString(6, successKeyword);
         }
-        stmt.bindLong(6, entity.getIsTimeStamp());
+        stmt.bindLong(7, entity.getIsTimeStamp());
     }
 
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     @Override
     public ScriptDetails readEntity(Cursor cursor, int offset) {
         ScriptDetails entity = new ScriptDetails( //
-            cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // stepId
-            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // serialNum
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // operateType
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // paramValue
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // successKeyword
-            cursor.getInt(offset + 5) // isTimeStamp
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // stepId
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // serialNum
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // operateType
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // paramValue
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // successKeyword
+            cursor.getInt(offset + 6) // isTimeStamp
         );
         return entity;
     }
      
     @Override
     public void readEntity(Cursor cursor, ScriptDetails entity, int offset) {
-        entity.setStepId(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
-        entity.setSerialNum(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
-        entity.setOperateType(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setParamValue(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setSuccessKeyword(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setIsTimeStamp(cursor.getInt(offset + 5));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setStepId(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
+        entity.setSerialNum(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setOperateType(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setParamValue(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setSuccessKeyword(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setIsTimeStamp(cursor.getInt(offset + 6));
      }
     
     @Override
-    protected final Void updateKeyAfterInsert(ScriptDetails entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected final Long updateKeyAfterInsert(ScriptDetails entity, long rowId) {
+        entity.setId(rowId);
+        return rowId;
     }
     
     @Override
-    public Void getKey(ScriptDetails entity) {
-        return null;
+    public Long getKey(ScriptDetails entity) {
+        if(entity != null) {
+            return entity.getId();
+        } else {
+            return null;
+        }
     }
 
     @Override
     public boolean hasKey(ScriptDetails entity) {
-        // TODO
-        return false;
+        return entity.getId() != null;
     }
 
     @Override

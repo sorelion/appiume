@@ -26,9 +26,10 @@ public class ScriptDetails {
     //时间戳
     private int isTimeStamp;//是、否
 
-    @Generated(hash = 1300127819)
-    public ScriptDetails(String stepId, String serialNum, String operateType,
-                         String paramValue, String successKeyword, int isTimeStamp) {
+    @Generated(hash = 1942684944)
+    public ScriptDetails(Long id, String stepId, String serialNum, String operateType,
+            String paramValue, String successKeyword, int isTimeStamp) {
+        this.id = id;
         this.stepId = stepId;
         this.serialNum = serialNum;
         this.operateType = operateType;

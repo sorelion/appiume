@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.cmit.clouddetection.bean.RequestData;
-import com.cmit.clouddetection.bean.ResponeData;
+
 import com.cmit.clouddetection.contstant.HttpContstant;
 import com.cmit.clouddetection.request.MachineInfoService;
 import com.cmit.clouddetection.utils.AES;
@@ -45,7 +45,7 @@ public class ObtainTaskRunnable implements Runnable {
 
         RequestData requestData = new RequestData();
         HashMap<String, String> map = new HashMap<>();
-        map.put("imsi", SystemUtils.getImsi(mContext));
+        map.put("imsi",  SystemUtils.getImsi(mContext));
         map.put("imei", SystemUtils.getImei());
         requestData.setData(map);
         HashMap<String, String> maps = new HashMap<>();

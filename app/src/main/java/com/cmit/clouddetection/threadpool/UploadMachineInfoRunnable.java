@@ -59,9 +59,9 @@ public class UploadMachineInfoRunnable implements Runnable {
     public void run() {
         MachineInfo machineInfo = new MachineInfo();
         machineInfo.setImei(SystemUtils.getImei());
-        machineInfo.setImsi(SystemUtils.getImsi(mContext));
+        machineInfo.setImsi(new SystemUtils().getImsi(mContext));
         machineInfo.setElectricity(getElectricity());
-        machineInfo.setNetworkType(getNetworkState().getState());
+        machineInfo.setNetworkType(SystemUtils.getNetworkState(mContext).getState());
         machineInfo.setPhonePosition(getPhonePosition());
         machineInfo.setAppVersion(getVersionCode());
         machineInfo.setInstalledSoftInfo(new Gson().toJson(getInstalledApps()));
@@ -103,28 +103,7 @@ public class UploadMachineInfoRunnable implements Runnable {
         return batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
     }
 
-    //获取网络类型
-    public NetworkState getNetworkState() {
-        ConnectivityManager connManager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE); // 获取网络服务
-        if (null == connManager) {//为空则认为无网络
-            return NETWORK_NONE;
-        }
-        NetworkInfo activeNetInfo = connManager.getActiveNetworkInfo();
-        if (activeNetInfo == null || !activeNetInfo.isAvailable()) {
-            return NETWORK_NONE;
-        }
-        // 判断是否为WIFI
-        NetworkInfo wifiInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        if (null != wifiInfo) {
-            NetworkInfo.State state = wifiInfo.getState();
-            if (null != state) {
-                if (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.CONNECTING) {
-                    return NETWORK_WIFI;
-                }
-            }
-        }
-        return NETWORK_MOBILE;
-    }
+
 
     // 获取地址信息
     public String getPhonePosition() {
