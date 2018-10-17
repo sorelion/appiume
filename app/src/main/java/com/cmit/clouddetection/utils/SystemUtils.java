@@ -1,6 +1,7 @@
 package com.cmit.clouddetection.utils;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
@@ -10,7 +11,11 @@ import android.telephony.TelephonyManager;
 
 import com.cmit.clouddetection.bean.NetworkState;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import static com.cmit.clouddetection.bean.NetworkState.NETWORK_MOBILE;
 import static com.cmit.clouddetection.bean.NetworkState.NETWORK_NONE;
@@ -64,6 +69,83 @@ public class SystemUtils {
         }
         return NETWORK_MOBILE;
     }
+    /**
+     * 判断某个服务是否正在运行的方法
+     *
+     * @param mContext
+     * @param serviceName 是包名+服务的类名（例如：net.loonggg.testbackstage.TestService）
+     * @return true代表正在运行，false代表服务没有正在运行
+     */
+    public static boolean isServiceWork(Context mContext, String serviceName) {
+        boolean isWork = false;
+        ActivityManager myAM = (ActivityManager) mContext
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> myList = myAM.getRunningServices(400);
+        if (myList.size() <= 0) {
+            return false;
+        }
+        for (int i = 0; i < myList.size(); i++) {
+            String mName = myList.get(i).service.getClassName().toString();
+            if (mName.equals(serviceName)) {
+                isWork = true;
+                break;
+            }
+        }
+        return isWork;
+    }
 
-
+    /**
+     * 静默安装
+     */
+    public  static  void installSlient(String apkPath) {
+        String cmd = "pm install -r " + apkPath;
+        Process process = null;
+        DataOutputStream os = null;
+        BufferedReader successResult = null;
+        BufferedReader errorResult = null;
+        StringBuilder successMsg = null;
+        StringBuilder errorMsg = null;
+        try {
+            //静默安装需要root权限
+            process = Runtime.getRuntime().exec("su");
+            os = new DataOutputStream(process.getOutputStream());
+            os.write(cmd.getBytes());
+            os.writeBytes("\n");
+            os.writeBytes("exit\n");
+            os.flush();
+            //执行命令
+            process.waitFor();
+            //获取返回结果
+            successMsg = new StringBuilder();
+            errorMsg = new StringBuilder();
+            successResult = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            errorResult = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            String s;
+            while ((s = successResult.readLine()) != null) {
+                successMsg.append(s);
+            }
+            while ((s = errorResult.readLine()) != null) {
+                errorMsg.append(s);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (os != null) {
+                    os.close();
+                }
+                if (process != null) {
+                    process.destroy();
+                }
+                if (successResult != null) {
+                    successResult.close();
+                }
+                if (errorResult != null) {
+                    errorResult.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

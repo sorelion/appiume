@@ -9,18 +9,13 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.BatteryManager;
 import android.support.v4.app.ActivityCompat;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.cmit.clouddetection.R;
 import com.cmit.clouddetection.bean.MachineInfo;
-import com.cmit.clouddetection.bean.NetworkState;
 import com.cmit.clouddetection.bean.PhoneInfo;
-import com.cmit.clouddetection.bean.test;
 import com.cmit.clouddetection.contstant.HttpContstant;
 import com.cmit.clouddetection.request.MachineInfoService;
 import com.cmit.clouddetection.utils.SystemUtils;
@@ -28,7 +23,6 @@ import com.google.gson.Gson;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -39,10 +33,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static com.cmit.clouddetection.bean.NetworkState.NETWORK_MOBILE;
-import static com.cmit.clouddetection.bean.NetworkState.NETWORK_NONE;
-import static com.cmit.clouddetection.bean.NetworkState.NETWORK_WIFI;
 
 /**
  * Created by pact on 2018/9/27.
@@ -64,23 +54,26 @@ public class UploadMachineInfoRunnable implements Runnable {
         machineInfo.setNetworkType(SystemUtils.getNetworkState(mContext).getState());
         machineInfo.setPhonePosition(getPhonePosition());
         machineInfo.setAppVersion(getVersionCode());
+        machineInfo.setType(android.os.Build.BRAND + " " + android.os.Build.MODEL);
         machineInfo.setInstalledSoftInfo(new Gson().toJson(getInstalledApps()));
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(HttpContstant.URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
+
         retrofit.create(MachineInfoService.class).machineInfoResponse(machineInfo)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<test>() {
+                .subscribe(new Observer<String>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         Log.i("sore", "onSubscribe");
                     }
 
                     @Override
-                    public void onNext(test test) {
+                    public void onNext(String test) {
                         Log.i("sore", "onNext");
                     }
 
@@ -102,7 +95,6 @@ public class UploadMachineInfoRunnable implements Runnable {
         BatteryManager batteryManager = (BatteryManager) mContext.getSystemService(mContext.BATTERY_SERVICE);
         return batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
     }
-
 
 
     // 获取地址信息

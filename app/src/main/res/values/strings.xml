@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">CloudDetection</string>
     <string name="location_err">位置获取失败</string>
+    <string name="service_normal">服务正常运行，未重启服务</string>
+    <string name="service_restart_obtainTask">正在重启获取任务服务</string>
+    <string name="service_restart_phoneInfo">正在重启获取手机信息服务</string>
+    <string name="service_restart_task">正在重启任务上报服务</string>
 </resources>

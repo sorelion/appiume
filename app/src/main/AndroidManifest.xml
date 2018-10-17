@@ -27,6 +27,7 @@
             android:name=".service.ObtainTaskService"
             android:enabled="true"
             android:exported="true"></service>
+        <service android:name=".service.UploadPhoneInfoService" />
     </application>
 
 </manifest>

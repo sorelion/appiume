@@ -5,6 +5,7 @@ package com.cmit.clouddetection.bean;
  */
 
 public class MachineInfo {
+    private String type;//型号
     private String resourceId;//资源编号
     private String imei;//终端标识
     private String imsi;//手机卡标识
@@ -14,6 +15,14 @@ public class MachineInfo {
     private String networkType;//网络制式 0无网络 1 移动网络 2WiFi网络
     private int appVersion;//App版本
     private String installedSoftInfo;//已安装软件信息
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getResourceId() {
         return resourceId;

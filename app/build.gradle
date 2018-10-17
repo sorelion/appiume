@@ -14,7 +14,7 @@ android {
 
     greendao {
         //版本号，升级时可配置
-        schemaVersion 2
+        schemaVersion 3
         daoPackage 'com.cmit.clouddetection.dao'
         targetGenDir 'src/main/java'
     }
@@ -46,4 +46,10 @@ dependencies {
     //greedao
     compile 'org.greenrobot:greendao:3.2.2'
     compile 'org.greenrobot:greendao-generator:3.2.2'
+
+    //openCV
+    implementation project(':openCVLibrary341')
+
+    //fastjson
+    implementation 'com.alibaba:fastjson:1.2.14'
 }

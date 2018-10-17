@@ -1,5 +1,6 @@
 package com.cmit.clouddetection.fragment;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,19 +14,24 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.cmit.clouddetection.activity.MyApplication;
+import com.cmit.clouddetection.contstant.SPContsant;
 import com.cmit.clouddetection.databinding.FragmentAppBinding;
-import com.cmit.clouddetection.threadpool.ThreadPools;
+import com.cmit.clouddetection.utils.SPUtils;
 import com.cmit.clouddetection.utils.SystemUtils;
 
 import java.io.BufferedReader;
@@ -37,7 +43,6 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.List;
-
 /**
  * Created by pact on 2018/9/26.
  */
@@ -52,6 +57,7 @@ public class AppFragment extends Fragment {
     private TextView mInfo5;
     private MyPhoneStateListener myListener;
     private TelephonyManager tm;
+    private EditText mEtResource;
 
     @Nullable
     @Override
@@ -61,13 +67,38 @@ public class AppFragment extends Fragment {
         return mFragmentAppBinding.getRoot();
     }
 
+    private View.OnKeyListener onKeyListener = new View.OnKeyListener() {
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+                /*隐藏软键盘*/
+                InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (inputMethodManager.isActive()) {
+                    inputMethodManager.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+                }
+                if ("".equals(mEtResource.getText().toString())) {
+                    Toast.makeText(getActivity(), "资源编号不能为空", Toast.LENGTH_SHORT).show();
+                } else {
+                    SPUtils.putString(getActivity(), SPContsant.RESOURCE_ID, mEtResource.getText().toString());
+                    Toast.makeText(getActivity(), "资源编号保存成功", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            }
+            return false;
+        }
+    };
+
     private void initData() {
         mInfo1 = mFragmentAppBinding.tvMonitorInfo1;
         mInfo2 = mFragmentAppBinding.tvMonitorInfo2;
         mInfo3 = mFragmentAppBinding.tvMonitorInfo3;
         mInfo4 = mFragmentAppBinding.tvMonitorInfo4;
         mInfo5 = mFragmentAppBinding.tvMonitorInfo5;
-
+        mEtResource = mFragmentAppBinding.etResource;
+        if (!"".equals(SPUtils.getString(getActivity(), SPContsant.RESOURCE_ID, ""))) {
+            mEtResource.setText(SPUtils.getString(getActivity(), SPContsant.RESOURCE_ID));
+        }
+        mEtResource.setOnKeyListener(onKeyListener);
         mInfo1.setText("手机名称：" + android.os.Build.BRAND + " "
                 + android.os.Build.MODEL + "\n" + "手机串号："
                 + SystemUtils.getImei() + "\n" + "手机卡串号："
@@ -82,14 +113,6 @@ public class AppFragment extends Fragment {
                 + getRamUse(getActivity()) + "%" + "\n" + "存储使用率："
                 + getRomUse() + "%" + "\n");
         mInfo2.setText("当前网络类型：" + SystemUtils.getNetworkState(getActivity()).getState() + "\n");
-     ThreadPools.excute(new Runnable() {
-         @Override
-         public void run() {
-
-         }
-     });
-
-
         myListener = new MyPhoneStateListener();
         tm = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
         tm.listen(myListener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS | PhoneStateListener.LISTEN_SERVICE_STATE);
@@ -101,7 +124,16 @@ public class AppFragment extends Fragment {
         @Override
         public void onSignalStrengthsChanged(SignalStrength signalStrength) {
             super.onSignalStrengthsChanged(signalStrength);
-            String imsi = new SystemUtils().getImsi(MyApplication.getContext());
+            String imsi;
+            try {
+                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                    imsi = null;
+                } else {
+                    imsi = tm.getSubscriberId();
+                }
+            } catch (Exception e) {
+                imsi = null;
+            }
             if (imsi != null) {
                 if (null != imsi) {
                     int asu = signalStrength.getGsmSignalStrength();

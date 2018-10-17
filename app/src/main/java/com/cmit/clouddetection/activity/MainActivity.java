@@ -1,13 +1,21 @@
 package com.cmit.clouddetection.activity;
 
+import android.app.Activity;
+
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.media.projection.MediaProjectionManager;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
+import android.test.mock.MockApplication;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +28,20 @@ import com.cmit.clouddetection.fragment.AppFragment;
 import com.cmit.clouddetection.fragment.DebugFragment;
 import com.cmit.clouddetection.fragment.MainFragment;
 import com.cmit.clouddetection.service.ObtainTaskService;
+import com.cmit.clouddetection.service.UploadMachineInfoService;
+import com.cmit.clouddetection.threadpool.ThreadPools;
+import com.cmit.clouddetection.utils.AdbUtils;
+import com.cmit.clouddetection.utils.LogUtil;
+import com.cmit.clouddetection.utils.SystemUtils;
+
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout mTabMsg;
     private LinearLayout mTabPhoneBtn2;
     private LinearLayout mTabAboutBtn2;
+    private List<Fragment> mList;
 
 
     @Override
@@ -51,6 +74,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //使用databing绑定界面
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         init();
+
+        MediaProjectionManager mMediaProjectionManager = (MediaProjectionManager) getApplication().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        if (MyApplication.getInstan().getIntent() == null && MyApplication.getInstan().getResult() == 0) {
+            startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(), 1);
+        }
     }
 
     //界面切换监听
@@ -58,6 +86,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onPageSelected(int position) {
             super.onPageSelected(position);
+            View view = MainActivity.this.getCurrentFocus();
+            if (view != null) {
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
             //选择页面
             setCurrentItem(position);
         }
@@ -69,11 +102,70 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ininListener();
         setCurrentItem(MAIN_FRAGMENT);
         registerService();
+        //拷贝jar和安装openCV
+        ThreadPools.excute(new Runnable() {
+            @Override
+            public void run() {
+                copyApkFromAssets("AppiumBootstrap.jar");
+                boolean avilible = AdbUtils.isAvilible(MainActivity.this, "org.opencv.engine");
+                if (!avilible) {
+                    try {
+                        InputStream mInputStream = getAssets().open("OpenCV.apk");
+                        String filePath = Environment.getExternalStorageDirectory() + "/opencv";
+                        File file = new File(filePath);
+                        if (!file.exists()) {
+                            file.mkdir();
+                        }
+                        File mFile = new File(filePath + "/OpenCV.apk");
+                        if (!mFile.exists()) {
+                            mFile.createNewFile();
+                        }
+                        FileOutputStream fileOutputStream = new FileOutputStream(mFile);
+                        byte[] bytes = new byte[1024];
+                        int i = 0;
+                        while ((i = mInputStream.read(bytes)) > 0) {
+                            fileOutputStream.write(bytes, 0, i);
+                        }
+                        mInputStream.close();
+                        fileOutputStream.close();
+                        SystemUtils.installSlient(filePath + "/OpenCV.apk");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+    }
+
+    /**
+     * 将jar包拷贝到本地
+     */
+    public void copyApkFromAssets(String fileName) {
+        try {
+            InputStream is = getAssets().open(fileName);
+            File distDir = this.getDir("appiumBootstrap", Activity.MODE_PRIVATE);
+            File distFile = new File(distDir.getAbsolutePath() + File.separator + fileName);
+            if (!distFile.exists())
+                distFile.createNewFile();
+            FileOutputStream fos = new FileOutputStream(distFile);
+            byte[] temp = new byte[1024];
+            int i = 0;
+            while ((i = is.read(temp)) > 0) {
+                fos.write(temp, 0, i);
+            }
+            fos.flush();// 刷新缓冲区
+            fos.close();
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void registerService() {
         //开启上传手机信息服务
-//        startService(new Intent(this, UploadMachineInfoService.class));
+        startService(new Intent(this, UploadMachineInfoService.class));
         //开启获取任务服务
         startService(new Intent(this, ObtainTaskService.class));
     }
@@ -87,16 +179,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initFragment() {
-        List<Fragment> list = new ArrayList<>();
+        mList = new ArrayList<>();
         AboutFragment aboutFragment = new AboutFragment();
         AppFragment appFragment = new AppFragment();
         DebugFragment debugFragment = new DebugFragment();
         MainFragment mainFragment = new MainFragment();
-        list.add(mainFragment);
-        list.add(debugFragment);
-        list.add(appFragment);
-        list.add(aboutFragment);
-        main_view_pager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), list));
+        mList.add(mainFragment);
+        mList.add(debugFragment);
+        mList.add(appFragment);
+        mList.add(aboutFragment);
+        main_view_pager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), mList));
     }
 
     private void initID() {
@@ -179,5 +271,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!OpenCVLoader.initDebug()) {
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback);
+        } else {
+            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+        }
+    }
+
+    //OpenCV库加载并初始化成功后的回调函数
+    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+        @Override
+        public void onManagerConnected(int status) {
+            // TODO Auto-generated method stub
+            switch (status) {
+                case BaseLoaderCallback.SUCCESS:
+                    LogUtil.getInstance().increaseLog("OpenCV库成功加载", null);
+                    Log.i("MainActivity", "OpenCV库成功加载");
+                    break;
+                default:
+                    super.onManagerConnected(status);
+                    LogUtil.getInstance().increaseLog("OpenCV库加载失败", null);
+                    Log.i("MainActivity", "OpenCV库加载失败");
+                    break;
+            }
+        }
+    };
 
 }
