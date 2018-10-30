@@ -708,7 +708,7 @@ public class AppWorkRunnable implements Runnable {
         NoHttp.initialize(context);
         ShotScreenUtils shotScreenUtils = new ShotScreenUtils(context);
         Bitmap bitmap = shotScreenUtils.startCapture(500); //截图操作
-        StringRequest stringRequest = (StringRequest) new StringRequest(HttpContstant.IP + HttpContstant.UPLOADIMAGE, RequestMethod.POST).add("file", new BitmapBinary(bitmap, "test"));
+        StringRequest stringRequest = (StringRequest) new StringRequest(HttpContstant.IP + HttpContstant.UPLOADIMAGE, RequestMethod.POST).add("file", JSON.toJSONString(bitmap));
         NoHttp.newRequestQueue().add(0, stringRequest, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {

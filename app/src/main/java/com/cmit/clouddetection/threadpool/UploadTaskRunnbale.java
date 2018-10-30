@@ -66,11 +66,6 @@ public class UploadTaskRunnbale implements Runnable {
             TaskResultDetailDao taskResultDetailDao = MyApplication.getDaoInstant().getTaskResultDetailDao();
             List<TaskResultDetail> list = taskResultDetailDao.queryBuilder().where(TaskResultDetailDao.Properties.ScriptId.eq(data.getScriptId())).list();
             for (TaskResultDetail taskResultDetail : list) {
-
-
-
-
-
                 switch (taskResultDetail.getOperateNum()) {
                     case "2":
                         taskResultDetail.setOperateNum("元素点击");
@@ -122,10 +117,7 @@ public class UploadTaskRunnbale implements Runnable {
                         break;
                 }
             }
-
 //            uploadTaskResultInfo.setList(list);
-
-
 
         } catch (Exception e) {
             e.printStackTrace();

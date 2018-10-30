@@ -50,7 +50,7 @@ public class UploadMachineInfoRunnable implements Runnable {
         machineInfo.setAppVersion(getVersionCode());
         machineInfo.setType(android.os.Build.BRAND + " " + android.os.Build.MODEL);
         machineInfo.setInstalledSoftInfo(new Gson().toJson(getInstalledApps()));
-        
+
     }
 
     //获取电量信息

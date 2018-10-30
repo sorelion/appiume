@@ -3,6 +3,7 @@ package com.cmit.clouddetection.activity;
 import android.app.Application;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.cmit.clouddetection.dao.DaoMaster;
 import com.cmit.clouddetection.dao.DaoSession;
@@ -20,6 +21,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         setupDatabase();
+        Log.i("sore","nohttp初始化完成");
         NoHttp.initialize(this);
     }
 
