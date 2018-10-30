@@ -137,7 +137,7 @@ public class ObtainTaskRunnable implements Runnable {
 //        message.what = ObtainTaskService.START_WORK_APP;
 //        handler.sendMessage(message);
 
-        StringRequest stringRequest = (StringRequest) new StringRequest(HttpContstant.GETTASK, RequestMethod.POST).set("imei", "{'imei':'1234ACD'}");
+        StringRequest stringRequest = (StringRequest) new StringRequest(HttpContstant.IP+HttpContstant.GETTASK, RequestMethod.POST).set("imei", "{'imei':'1234ACD'}");
         NoHttp.newRequestQueue().add(0, stringRequest, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {

@@ -5,7 +5,7 @@ package com.cmit.clouddetection.contstant;
  */
 
 public interface HttpContstant {
-    String IP = "http://192.168.191.1:8083";
+    String IP = "http://192.168.119.215";
     String PORT = "8083";
     String URL = IP + ":" + PORT;
     //请求任务
