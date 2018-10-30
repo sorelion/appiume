@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.cmit.clouddetection.dao.DaoMaster;
 import com.cmit.clouddetection.dao.DaoSession;
+import com.yanzhenjie.nohttp.NoHttp;
 
 /**
  * Created by pact on 2018/10/9.
@@ -19,6 +20,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         setupDatabase();
+        NoHttp.initialize(this);
     }
 
     public static MyApplication getInstan() {

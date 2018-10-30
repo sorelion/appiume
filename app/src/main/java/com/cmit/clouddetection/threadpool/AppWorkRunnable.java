@@ -2,18 +2,26 @@ package com.cmit.clouddetection.threadpool;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.os.Environment;
+import android.util.Base64;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.cmit.clouddetection.activity.MyApplication;
-import com.cmit.clouddetection.bean.TaskDetailInfo;
 import com.cmit.clouddetection.bean.TaskInfo;
+import com.cmit.clouddetection.contstant.HttpContstant;
 import com.cmit.clouddetection.dao.TaskResultDao;
 import com.cmit.clouddetection.dao.TaskResultDetailDao;
 import com.cmit.clouddetection.entry.TaskResult;
 import com.cmit.clouddetection.entry.TaskResultDetail;
 import com.cmit.clouddetection.exception.TaskException;
+import com.cmit.clouddetection.recognition.Constants;
+import com.cmit.clouddetection.recognition.Demo_lyocr_general_ugc;
+import com.cmit.clouddetection.recognition.pos;
+import com.cmit.clouddetection.recognition.prism_wordsInfo;
+import com.cmit.clouddetection.recognition.ugc_result;
 import com.cmit.clouddetection.socket.Parameters;
 import com.cmit.clouddetection.socket.SocketConnect;
 import com.cmit.clouddetection.socket.SocketRequest;
@@ -22,7 +30,18 @@ import com.cmit.clouddetection.utils.LogUtil;
 import com.cmit.clouddetection.utils.ShotScreenUtils;
 import com.cmit.clouddetection.utils.TimerUtils;
 import com.google.gson.Gson;
+import com.yanzhenjie.nohttp.BitmapBinary;
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.RequestMethod;
+import com.yanzhenjie.nohttp.rest.OnResponseListener;
+import com.yanzhenjie.nohttp.rest.Response;
+import com.yanzhenjie.nohttp.rest.StringRequest;
+
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,13 +66,13 @@ public class AppWorkRunnable implements Runnable {
     @Override
     public void run() {
         ThreadPools.iswork = true;
-        startAppWork(context);
+        startAppWork();
         ThreadPools.iswork = false;
         ThreadPools.excute(new Runnable() {
             @Override
             public void run() {
                 UploadTaskRunnbale uploadTaskRunnbale = new UploadTaskRunnbale(null, 0, context);
-//                uploadTaskRunnbale.saveLog(qbmr);
+                uploadTaskRunnbale.uploadLog(taskInfo);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -69,17 +88,17 @@ public class AppWorkRunnable implements Runnable {
     /**
      * APP探测任务
      */
-    private void startAppWork(final Context context) {
+    private void startAppWork() {
         TimerUtils totalTime = new TimerUtils();//计时器
         try {
-            List<TaskDetailInfo> list = taskInfo.getList();
+            List<TaskInfo.DataBean.ScriptInfosBean> scriptInfos = taskInfo.getData().getScriptInfos();
             LogUtil.getInstance().increaseLog("开始执行", null);
             totalTime.startTime();
             totalTime.setStartTime(System.currentTimeMillis());
-            for (int i = 0; i < list.size(); i++) { // 解析脚本
-                TaskDetailInfo listBean = list.get(i);
+            for (int i = 0; i < scriptInfos.size(); i++) { // 解析脚本
+                TaskInfo.DataBean.ScriptInfosBean scriptInfosBean = scriptInfos.get(i);
                 //脚本解析
-                resolveAppScript(listBean);
+                resolveAppScript(scriptInfosBean);
             }
             totalTime.stopTime();
             SocketConnect.close(); //断开socket连接
@@ -145,7 +164,7 @@ public class AppWorkRunnable implements Runnable {
     /**
      * 脚本解析
      */
-    public void resolveAppScript(TaskDetailInfo listBean) throws Exception {
+    public void resolveAppScript(TaskInfo.DataBean.ScriptInfosBean listBean) throws Exception {
         int operateType = listBean.getOperateType();
         String paramValue = listBean.getParamValue();
         int scriptId = listBean.getScriptId();
@@ -201,6 +220,25 @@ public class AppWorkRunnable implements Runnable {
                         break;
                     //配置文字
                     case "text":
+                        Socket socket = new Socket("localhost", 4724); //创建连接
+                        socket.isConnected();
+                        OutputStream os = socket.getOutputStream();
+                        AdbUtils.execShellCmdSilent("screencap -p /storage/emulated/0/" + paramValue + ".png");
+                        String imgBase64 = imageToBase("/storage/emulated/0/" + paramValue + ".png");
+                        //UGCOCR 的上传报文格式：{//图像数据：base64编码，要求base64编码后大小不超过4M，最短边至少15px，最长边最大4096px，支持jpg/png/bmp格式，和url参数只能同时存在一个\"img\":\"\",//图像url地址：图片完整URL，URL长度不超过1024字节，URL对应的图片base64编码后大小不超过4M，最短边至少15px，最长边最大4096px，支持jpg/png/bmp格式，和img参数只能同时存在一个\"url\":\"\",//是否需要识别结果中每一行的置信度，默认不需要。true：需要false：不需要\"prob\":false}";
+                        String body = "{\"img\": \"" + imgBase64 + "\",\"configure\":{ \"min_size\" : 16, \"prob\" : false }}";
+                        Demo_lyocr_general_ugc ugc = new Demo_lyocr_general_ugc();
+                        ugc.ocrUgcHttpsTest(body);
+                        Thread.sleep(15000);
+                        ugc_result result = new Gson().fromJson(Constants.AliResult, ugc_result.class);
+                        Point point = getResultPointByUGC(result.getPrism_wordsInfo(), paramValue);
+                        String cmd = "{\"cmd\":\"action\",\"action\":\"click\",\"params\":{\"x\":" + point.x + ",\"y\":" + point.y + "}}";
+                        Thread.sleep(5000);
+                        String jsonString = cmd + String.valueOf(c);
+                        os.write((jsonString).getBytes("utf-8"));
+                        os.flush();
+                        os.close();
+                        socket.close();
                         break;
                 }
                 break;
@@ -582,6 +620,35 @@ public class AppWorkRunnable implements Runnable {
         }
     }
 
+    public static Point getResultPointByUGC(List<prism_wordsInfo> prism_wordsInfos, String cmd) {
+        Point point = new Point();
+
+        for (prism_wordsInfo prismWordsInfo : prism_wordsInfos) {
+
+            if (prismWordsInfo.getWord().equals(cmd)) {
+                List<pos> posList = prismWordsInfo.getPos();
+                point.x = (int) (posList.get(0).getX() + 0.5 * (posList.get(1).getX() - posList.get(0).getX()));
+                point.y = (int) (posList.get(0).getY() + 0.5 * (posList.get(3).getY() - posList.get(0).getY()));
+            }
+
+        }
+        return point;
+    }
+
+    public static String imageToBase(String fileName) {
+        //decode to bitmap
+        Bitmap bitmap = BitmapFactory.decodeFile(fileName);
+        //convert to byte array
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] bytes = baos.toByteArray();
+
+        //base64 encode
+        byte[] encode = Base64.encode(bytes, Base64.DEFAULT);
+        String imgBase64 = new String(encode);
+        return imgBase64;
+    }
+
     /**
      * scoket返回结果处理
      */
@@ -596,7 +663,7 @@ public class AppWorkRunnable implements Runnable {
             taskResultDetail.setSingleStepEndTime(timerUtils.getEndTimeStr());
             taskResultDetail.setRunningResult("任务超时");
             //TODO 截图并上传
-
+            shotBitmapAndUpLoad();
             //记录每次执行步骤结果
             TaskResultDetailDao taskResultDetailDao = MyApplication.getDaoInstant().getTaskResultDetailDao();
             taskResultDetailDao.save(taskResultDetail);
@@ -627,6 +694,7 @@ public class AppWorkRunnable implements Runnable {
                 taskResultDetail.setScriptId(scriptId);
                 taskResultDetail.setSingleStepEndTime(timerUtils.getEndTimeStr());
                 //TODO 截图并上传
+                shotBitmapAndUpLoad();
                 //记录每次执行步骤结果
                 TaskResultDetailDao taskResultDetailDao = MyApplication.getDaoInstant().getTaskResultDetailDao();
                 taskResultDetailDao.save(taskResultDetail);
@@ -636,5 +704,34 @@ public class AppWorkRunnable implements Runnable {
         }
     }
 
+    private void shotBitmapAndUpLoad() throws InterruptedException {
+        NoHttp.initialize(context);
+        ShotScreenUtils shotScreenUtils = new ShotScreenUtils(context);
+        Bitmap bitmap = shotScreenUtils.startCapture(500); //截图操作
+        StringRequest stringRequest = (StringRequest) new StringRequest(HttpContstant.IP + HttpContstant.UPLOADIMAGE, RequestMethod.POST).add("file", new BitmapBinary(bitmap, "test"));
+        NoHttp.newRequestQueue().add(0, stringRequest, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+                Log.i("sore", "" + what);
+            }
 
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                Log.i("sore", "onSucceed");
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+                Log.i("sore", "onFailed");
+            }
+
+            @Override
+            public void onFinish(int what) {
+                Log.i("sore", "onFinish");
+            }
+        });
+
+    }
 }
+
+

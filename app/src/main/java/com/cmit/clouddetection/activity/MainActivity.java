@@ -2,26 +2,30 @@ package com.cmit.clouddetection.activity;
 
 import android.app.Activity;
 
+
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.projection.MediaProjectionManager;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.test.mock.MockApplication;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.cmit.clouddetection.R;
 import com.cmit.clouddetection.adapter.ViewPagerAdapter;
+import com.cmit.clouddetection.contstant.HttpContstant;
 import com.cmit.clouddetection.databinding.ActivityMainBinding;
 import com.cmit.clouddetection.fragment.AboutFragment;
 import com.cmit.clouddetection.fragment.AppFragment;
@@ -33,6 +37,11 @@ import com.cmit.clouddetection.threadpool.ThreadPools;
 import com.cmit.clouddetection.utils.AdbUtils;
 import com.cmit.clouddetection.utils.LogUtil;
 import com.cmit.clouddetection.utils.SystemUtils;
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.RequestMethod;
+import com.yanzhenjie.nohttp.rest.OnResponseListener;
+import com.yanzhenjie.nohttp.rest.Response;
+import com.yanzhenjie.nohttp.rest.StringRequest;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.LoaderCallbackInterface;
@@ -74,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //使用databing绑定界面
         mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         init();
-
         MediaProjectionManager mMediaProjectionManager = (MediaProjectionManager) getApplication().getSystemService(Context.MEDIA_PROJECTION_SERVICE);
         if (MyApplication.getInstan().getIntent() == null && MyApplication.getInstan().getResult() == 0) {
             startActivityForResult(mMediaProjectionManager.createScreenCaptureIntent(), 1);
@@ -101,12 +109,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initFragment();
         ininListener();
         setCurrentItem(MAIN_FRAGMENT);
-        registerService();
+
         //拷贝jar和安装openCV
         ThreadPools.excute(new Runnable() {
             @Override
             public void run() {
-                copyApkFromAssets("AppiumBootstrap.jar");
+//                copyApkFromAssets("AppiumBootstrap.jar");
                 boolean avilible = AdbUtils.isAvilible(MainActivity.this, "org.opencv.engine");
                 if (!avilible) {
                     try {
@@ -274,6 +282,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        registerService();
         if (!OpenCVLoader.initDebug()) {
             OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback);
         } else {
@@ -300,4 +309,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
+
 }
+

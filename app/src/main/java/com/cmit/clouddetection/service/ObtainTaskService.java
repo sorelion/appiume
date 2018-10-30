@@ -31,7 +31,7 @@ public class ObtainTaskService extends Service {
                     break;
                 case WHAT_GETTASK:
                     //取任务线程
-                    ThreadPools.excute(new ObtainTaskRunnable(mHandler, taskMode, WHAT_GETTASK));
+                    ThreadPools.excute(new ObtainTaskRunnable(ObtainTaskService.this,mHandler, taskMode, WHAT_GETTASK));
                     break;
             }
         }
@@ -48,7 +48,7 @@ public class ObtainTaskService extends Service {
         super.onCreate();
         taskMode = Constants.GETTESTTASKRATE_NORMAL;
         //取任务线程
-        ThreadPools.excute(new ObtainTaskRunnable(mHandler, taskMode, WHAT_GETTASK));
+        ThreadPools.excute(new ObtainTaskRunnable(ObtainTaskService.this,mHandler, taskMode, WHAT_GETTASK));
     }
 
     public class taskFrequencyController extends Binder implements changeTaskFrequency {
@@ -57,7 +57,7 @@ public class ObtainTaskService extends Service {
             // 当任务频率模式发生更改的话，就取消任务，以新的频率提交定时任务
             taskMode = mode;
             mHandler.removeMessages(WHAT_GETTASK);
-            ThreadPools.excute(new ObtainTaskRunnable(mHandler, taskMode, WHAT_GETTASK));
+            ThreadPools.excute(new ObtainTaskRunnable(ObtainTaskService.this,mHandler, taskMode, WHAT_GETTASK));
         }
     }
 

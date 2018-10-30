@@ -8,167 +8,290 @@ import java.util.List;
 
 public class TaskInfo {
 
+
     /**
-     * id : 5
-     * instanceName : 2018-10-09 09:30:00
-     * taskStatus : 1
-     * terminalResourceMark : null
-     * phoneNum : 1008611
-     * taskId : null
-     * scriptId : 15
-     * strategyId : null
-     * taskSerial : 1539240849340
-     * operator : 1
-     * provinceName : 广东
-     * businessName : test2
-     * channel : 1
-     * isAided : null
-     * uselocalnum : 0
-     * list : [{"id":1,"serialNum":1,"operateType":1,"paramValue":1,"successKeyword":"启动","isTimestamp":1,"scriptId":15},{"id":2,"serialNum":2,"operateType":2,"paramValue":2,"successKeyword":"点击","isTimestamp":1,"scriptId":15},{"id":3,"serialNum":3,"operateType":3,"paramValue":3,"successKeyword":"输入","isTimestamp":1,"scriptId":15},{"id":4,"serialNum":4,"operateType":4,"paramValue":4,"successKeyword":"回退","isTimestamp":1,"scriptId":15},{"id":5,"serialNum":1,"operateType":1,"paramValue":1,"successKeyword":"启动","isTimestamp":1,"scriptId":15}]
+     * code : 0
+     * msg : 操作成功!
+     * data : {"id":1,"instanceName":"2018-10-17 12:00:00","taskStatus":1,"terminalResourceMark":null,"phoneNum":null,"taskId":1,"scriptId":1,"strategyId":1,"taskSerial":1540281098753,"operator":1,"provinceName":"广东","businessName":"流量查询","channel":1,"isAided":null,"uselocalnum":0,"smsVerifycodeConfigs":[],"scriptInfos":[{"id":1,"serialNum":1,"operateType":1,"paramValue":"ChinaMobile","successKeyword":"","isTimestamp":null,"scriptId":1},{"id":2,"serialNum":2,"operateType":2,"paramValue":"我的","successKeyword":"","isTimestamp":null,"scriptId":1},{"id":3,"serialNum":3,"operateType":2,"paramValue":"我的流量","successKeyword":"流量","isTimestamp":null,"scriptId":1}]}
      */
 
-    private int id;//
-    private String instanceName;
-    private int taskStatus;
-    private Object terminalResourceMark;
-    private String phoneNum;
-    private Object taskId;
-    private int scriptId;//脚本ID
-    private Object strategyId;
-    private long taskSerial;
-    private int operator;
-    private String provinceName;
-    private String businessName;
-    private int channel;
-    private Object isAided;
-    private int uselocalnum;
-    private List<TaskDetailInfo> list;
+    private int code;
+    private String msg;
+    private DataBean data;
 
-    public int getId() {
-        return id;
+    public int getCode() {
+        return code;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCode(int code) {
+        this.code = code;
     }
 
-    public String getInstanceName() {
-        return instanceName;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setInstanceName(String instanceName) {
-        this.instanceName = instanceName;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
-    public int getTaskStatus() {
-        return taskStatus;
+    public DataBean getData() {
+        return data;
     }
 
-    public void setTaskStatus(int taskStatus) {
-        this.taskStatus = taskStatus;
+    public void setData(DataBean data) {
+        this.data = data;
     }
 
-    public Object getTerminalResourceMark() {
-        return terminalResourceMark;
-    }
+    public static class DataBean {
+        /**
+         * id : 1
+         * instanceName : 2018-10-17 12:00:00
+         * taskStatus : 1
+         * terminalResourceMark : null
+         * phoneNum : null
+         * taskId : 1
+         * scriptId : 1
+         * strategyId : 1
+         * taskSerial : 1540281098753
+         * operator : 1
+         * provinceName : 广东
+         * businessName : 流量查询
+         * channel : 1
+         * isAided : null
+         * uselocalnum : 0
+         * smsVerifycodeConfigs : []
+         * scriptInfos : [{"id":1,"serialNum":1,"operateType":1,"paramValue":"ChinaMobile","successKeyword":"","isTimestamp":null,"scriptId":1},{"id":2,"serialNum":2,"operateType":2,"paramValue":"我的","successKeyword":"","isTimestamp":null,"scriptId":1},{"id":3,"serialNum":3,"operateType":2,"paramValue":"我的流量","successKeyword":"流量","isTimestamp":null,"scriptId":1}]
+         */
 
-    public void setTerminalResourceMark(Object terminalResourceMark) {
-        this.terminalResourceMark = terminalResourceMark;
-    }
+        private int id;
+        private String instanceName;
+        private int taskStatus;
+        private Object terminalResourceMark;
+        private Object phoneNum;
+        private int taskId;
+        private int scriptId;
+        private int strategyId;
+        private long taskSerial;
+        private int operator;
+        private String provinceName;
+        private String businessName;
+        private int channel;
+        private Object isAided;
+        private int uselocalnum;
+        private List<?> smsVerifycodeConfigs;
+        private List<ScriptInfosBean> scriptInfos;
 
-    public String getPhoneNum() {
-        return phoneNum;
-    }
+        public int getId() {
+            return id;
+        }
 
-    public void setPhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum;
-    }
+        public void setId(int id) {
+            this.id = id;
+        }
 
-    public Object getTaskId() {
-        return taskId;
-    }
+        public String getInstanceName() {
+            return instanceName;
+        }
 
-    public void setTaskId(Object taskId) {
-        this.taskId = taskId;
-    }
+        public void setInstanceName(String instanceName) {
+            this.instanceName = instanceName;
+        }
 
-    public int getScriptId() {
-        return scriptId;
-    }
+        public int getTaskStatus() {
+            return taskStatus;
+        }
 
-    public void setScriptId(int scriptId) {
-        this.scriptId = scriptId;
-    }
+        public void setTaskStatus(int taskStatus) {
+            this.taskStatus = taskStatus;
+        }
 
-    public Object getStrategyId() {
-        return strategyId;
-    }
+        public Object getTerminalResourceMark() {
+            return terminalResourceMark;
+        }
 
-    public void setStrategyId(Object strategyId) {
-        this.strategyId = strategyId;
-    }
+        public void setTerminalResourceMark(Object terminalResourceMark) {
+            this.terminalResourceMark = terminalResourceMark;
+        }
 
-    public long getTaskSerial() {
-        return taskSerial;
-    }
+        public Object getPhoneNum() {
+            return phoneNum;
+        }
 
-    public void setTaskSerial(long taskSerial) {
-        this.taskSerial = taskSerial;
-    }
+        public void setPhoneNum(Object phoneNum) {
+            this.phoneNum = phoneNum;
+        }
 
-    public int getOperator() {
-        return operator;
-    }
+        public int getTaskId() {
+            return taskId;
+        }
 
-    public void setOperator(int operator) {
-        this.operator = operator;
-    }
+        public void setTaskId(int taskId) {
+            this.taskId = taskId;
+        }
 
-    public String getProvinceName() {
-        return provinceName;
-    }
+        public int getScriptId() {
+            return scriptId;
+        }
 
-    public void setProvinceName(String provinceName) {
-        this.provinceName = provinceName;
-    }
+        public void setScriptId(int scriptId) {
+            this.scriptId = scriptId;
+        }
 
-    public String getBusinessName() {
-        return businessName;
-    }
+        public int getStrategyId() {
+            return strategyId;
+        }
 
-    public void setBusinessName(String businessName) {
-        this.businessName = businessName;
-    }
+        public void setStrategyId(int strategyId) {
+            this.strategyId = strategyId;
+        }
 
-    public int getChannel() {
-        return channel;
-    }
+        public long getTaskSerial() {
+            return taskSerial;
+        }
 
-    public void setChannel(int channel) {
-        this.channel = channel;
-    }
+        public void setTaskSerial(long taskSerial) {
+            this.taskSerial = taskSerial;
+        }
 
-    public Object getIsAided() {
-        return isAided;
-    }
+        public int getOperator() {
+            return operator;
+        }
 
-    public void setIsAided(Object isAided) {
-        this.isAided = isAided;
-    }
+        public void setOperator(int operator) {
+            this.operator = operator;
+        }
 
-    public int getUselocalnum() {
-        return uselocalnum;
-    }
+        public String getProvinceName() {
+            return provinceName;
+        }
 
-    public void setUselocalnum(int uselocalnum) {
-        this.uselocalnum = uselocalnum;
-    }
+        public void setProvinceName(String provinceName) {
+            this.provinceName = provinceName;
+        }
 
-    public List<TaskDetailInfo> getList() {
-        return list;
-    }
+        public String getBusinessName() {
+            return businessName;
+        }
 
-    public void setList(List<TaskDetailInfo> list) {
-        this.list = list;
+        public void setBusinessName(String businessName) {
+            this.businessName = businessName;
+        }
+
+        public int getChannel() {
+            return channel;
+        }
+
+        public void setChannel(int channel) {
+            this.channel = channel;
+        }
+
+        public Object getIsAided() {
+            return isAided;
+        }
+
+        public void setIsAided(Object isAided) {
+            this.isAided = isAided;
+        }
+
+        public int getUselocalnum() {
+            return uselocalnum;
+        }
+
+        public void setUselocalnum(int uselocalnum) {
+            this.uselocalnum = uselocalnum;
+        }
+
+        public List<?> getSmsVerifycodeConfigs() {
+            return smsVerifycodeConfigs;
+        }
+
+        public void setSmsVerifycodeConfigs(List<?> smsVerifycodeConfigs) {
+            this.smsVerifycodeConfigs = smsVerifycodeConfigs;
+        }
+
+        public List<ScriptInfosBean> getScriptInfos() {
+            return scriptInfos;
+        }
+
+        public void setScriptInfos(List<ScriptInfosBean> scriptInfos) {
+            this.scriptInfos = scriptInfos;
+        }
+
+        public static class ScriptInfosBean {
+            /**
+             * id : 1
+             * serialNum : 1
+             * operateType : 1
+             * paramValue : ChinaMobile
+             * successKeyword :
+             * isTimestamp : null
+             * scriptId : 1
+             */
+
+            private int id;
+            private int serialNum;
+            private int operateType;
+            private String paramValue;
+            private String successKeyword;
+            private Object isTimestamp;
+            private int scriptId;
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public int getSerialNum() {
+                return serialNum;
+            }
+
+            public void setSerialNum(int serialNum) {
+                this.serialNum = serialNum;
+            }
+
+            public int getOperateType() {
+                return operateType;
+            }
+
+            public void setOperateType(int operateType) {
+                this.operateType = operateType;
+            }
+
+            public String getParamValue() {
+                return paramValue;
+            }
+
+            public void setParamValue(String paramValue) {
+                this.paramValue = paramValue;
+            }
+
+            public String getSuccessKeyword() {
+                return successKeyword;
+            }
+
+            public void setSuccessKeyword(String successKeyword) {
+                this.successKeyword = successKeyword;
+            }
+
+            public Object getIsTimestamp() {
+                return isTimestamp;
+            }
+
+            public void setIsTimestamp(Object isTimestamp) {
+                this.isTimestamp = isTimestamp;
+            }
+
+            public int getScriptId() {
+                return scriptId;
+            }
+
+            public void setScriptId(int scriptId) {
+                this.scriptId = scriptId;
+            }
+        }
     }
 }

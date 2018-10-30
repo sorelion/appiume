@@ -1,6 +1,7 @@
 package com.cmit.clouddetection.threadpool;
 
 import android.Manifest;
+
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -11,28 +12,21 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.BatteryManager;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
+
 
 import com.cmit.clouddetection.R;
 import com.cmit.clouddetection.bean.MachineInfo;
 import com.cmit.clouddetection.bean.PhoneInfo;
-import com.cmit.clouddetection.contstant.HttpContstant;
-import com.cmit.clouddetection.request.MachineInfoService;
+
 import com.cmit.clouddetection.utils.SystemUtils;
 import com.google.gson.Gson;
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by pact on 2018/9/27.
@@ -57,36 +51,6 @@ public class UploadMachineInfoRunnable implements Runnable {
         machineInfo.setType(android.os.Build.BRAND + " " + android.os.Build.MODEL);
         machineInfo.setInstalledSoftInfo(new Gson().toJson(getInstalledApps()));
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(HttpContstant.URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
-
-        retrofit.create(MachineInfoService.class).machineInfoResponse(machineInfo)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        Log.i("sore", "onSubscribe");
-                    }
-
-                    @Override
-                    public void onNext(String test) {
-                        Log.i("sore", "onNext");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.i("sore", "onError");
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Log.i("sore", "onComplete");
-                    }
-                });
 
     }
 

@@ -5,8 +5,11 @@ package com.cmit.clouddetection.contstant;
  */
 
 public interface HttpContstant {
-    String IP = "https://183.237.195.117";
-    String PORT = "8090";
-    //手机信息上报
-    String URL = IP + ":" + PORT + "/cdp/";
+    String IP = "http://192.168.191.1:8083";
+    String PORT = "8083";
+    String URL = IP + ":" + PORT;
+    //请求任务
+    String GETTASK = "/taskExecution/response";
+    //上传图片
+    String UPLOADIMAGE = "/taskExecution/upload";
 }
