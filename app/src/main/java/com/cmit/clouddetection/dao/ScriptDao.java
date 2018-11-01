@@ -24,17 +24,17 @@ public class ScriptDao extends AbstractDao<Script, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", true, "ID");
-        public final static Property ScriptId = new Property(1, Long.class, "scriptId", false, "SCRIPT_ID");
-        public final static Property TaskId = new Property(2, String.class, "taskId", false, "TASK_ID");
-        public final static Property StrategyId = new Property(3, String.class, "strategyId", false, "STRATEGY_ID");
-        public final static Property Operator = new Property(4, String.class, "operator", false, "OPERATOR");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
+        public final static Property ScriptId = new Property(1, int.class, "scriptId", false, "SCRIPT_ID");
+        public final static Property TaskId = new Property(2, int.class, "taskId", false, "TASK_ID");
+        public final static Property StrategyId = new Property(3, int.class, "strategyId", false, "STRATEGY_ID");
+        public final static Property Operator = new Property(4, int.class, "operator", false, "OPERATOR");
         public final static Property Province = new Property(5, String.class, "province", false, "PROVINCE");
         public final static Property BusinessName = new Property(6, String.class, "businessName", false, "BUSINESS_NAME");
         public final static Property Aided = new Property(7, int.class, "aided", false, "AIDED");
         public final static Property InstanceName = new Property(8, String.class, "instanceName", false, "INSTANCE_NAME");
         public final static Property PhoneNum = new Property(9, String.class, "phoneNum", false, "PHONE_NUM");
-        public final static Property TaskSerial = new Property(10, String.class, "taskSerial", false, "TASK_SERIAL");
+        public final static Property TaskSerial = new Property(10, Long.class, "taskSerial", false, "TASK_SERIAL");
     }
 
 
@@ -50,17 +50,17 @@ public class ScriptDao extends AbstractDao<Script, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"SCRIPT\" (" + //
-                "\"ID\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"SCRIPT_ID\" INTEGER," + // 1: scriptId
-                "\"TASK_ID\" TEXT," + // 2: taskId
-                "\"STRATEGY_ID\" TEXT," + // 3: strategyId
-                "\"OPERATOR\" TEXT," + // 4: operator
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
+                "\"SCRIPT_ID\" INTEGER NOT NULL ," + // 1: scriptId
+                "\"TASK_ID\" INTEGER NOT NULL ," + // 2: taskId
+                "\"STRATEGY_ID\" INTEGER NOT NULL ," + // 3: strategyId
+                "\"OPERATOR\" INTEGER NOT NULL ," + // 4: operator
                 "\"PROVINCE\" TEXT," + // 5: province
                 "\"BUSINESS_NAME\" TEXT," + // 6: businessName
                 "\"AIDED\" INTEGER NOT NULL ," + // 7: aided
                 "\"INSTANCE_NAME\" TEXT," + // 8: instanceName
                 "\"PHONE_NUM\" TEXT," + // 9: phoneNum
-                "\"TASK_SERIAL\" TEXT);"); // 10: taskSerial
+                "\"TASK_SERIAL\" INTEGER);"); // 10: taskSerial
     }
 
     /** Drops the underlying database table. */
@@ -77,26 +77,10 @@ public class ScriptDao extends AbstractDao<Script, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
- 
-        Long scriptId = entity.getScriptId();
-        if (scriptId != null) {
-            stmt.bindLong(2, scriptId);
-        }
- 
-        String taskId = entity.getTaskId();
-        if (taskId != null) {
-            stmt.bindString(3, taskId);
-        }
- 
-        String strategyId = entity.getStrategyId();
-        if (strategyId != null) {
-            stmt.bindString(4, strategyId);
-        }
- 
-        String operator = entity.getOperator();
-        if (operator != null) {
-            stmt.bindString(5, operator);
-        }
+        stmt.bindLong(2, entity.getScriptId());
+        stmt.bindLong(3, entity.getTaskId());
+        stmt.bindLong(4, entity.getStrategyId());
+        stmt.bindLong(5, entity.getOperator());
  
         String province = entity.getProvince();
         if (province != null) {
@@ -119,9 +103,9 @@ public class ScriptDao extends AbstractDao<Script, Long> {
             stmt.bindString(10, phoneNum);
         }
  
-        String taskSerial = entity.getTaskSerial();
+        Long taskSerial = entity.getTaskSerial();
         if (taskSerial != null) {
-            stmt.bindString(11, taskSerial);
+            stmt.bindLong(11, taskSerial);
         }
     }
 
@@ -133,26 +117,10 @@ public class ScriptDao extends AbstractDao<Script, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
- 
-        Long scriptId = entity.getScriptId();
-        if (scriptId != null) {
-            stmt.bindLong(2, scriptId);
-        }
- 
-        String taskId = entity.getTaskId();
-        if (taskId != null) {
-            stmt.bindString(3, taskId);
-        }
- 
-        String strategyId = entity.getStrategyId();
-        if (strategyId != null) {
-            stmt.bindString(4, strategyId);
-        }
- 
-        String operator = entity.getOperator();
-        if (operator != null) {
-            stmt.bindString(5, operator);
-        }
+        stmt.bindLong(2, entity.getScriptId());
+        stmt.bindLong(3, entity.getTaskId());
+        stmt.bindLong(4, entity.getStrategyId());
+        stmt.bindLong(5, entity.getOperator());
  
         String province = entity.getProvince();
         if (province != null) {
@@ -175,9 +143,9 @@ public class ScriptDao extends AbstractDao<Script, Long> {
             stmt.bindString(10, phoneNum);
         }
  
-        String taskSerial = entity.getTaskSerial();
+        Long taskSerial = entity.getTaskSerial();
         if (taskSerial != null) {
-            stmt.bindString(11, taskSerial);
+            stmt.bindLong(11, taskSerial);
         }
     }
 
@@ -190,16 +158,16 @@ public class ScriptDao extends AbstractDao<Script, Long> {
     public Script readEntity(Cursor cursor, int offset) {
         Script entity = new Script( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // scriptId
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // taskId
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // strategyId
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // operator
+            cursor.getInt(offset + 1), // scriptId
+            cursor.getInt(offset + 2), // taskId
+            cursor.getInt(offset + 3), // strategyId
+            cursor.getInt(offset + 4), // operator
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // province
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // businessName
             cursor.getInt(offset + 7), // aided
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // instanceName
             cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // phoneNum
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10) // taskSerial
+            cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10) // taskSerial
         );
         return entity;
     }
@@ -207,16 +175,16 @@ public class ScriptDao extends AbstractDao<Script, Long> {
     @Override
     public void readEntity(Cursor cursor, Script entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setScriptId(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
-        entity.setTaskId(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setStrategyId(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setOperator(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setScriptId(cursor.getInt(offset + 1));
+        entity.setTaskId(cursor.getInt(offset + 2));
+        entity.setStrategyId(cursor.getInt(offset + 3));
+        entity.setOperator(cursor.getInt(offset + 4));
         entity.setProvince(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setBusinessName(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setAided(cursor.getInt(offset + 7));
         entity.setInstanceName(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
         entity.setPhoneNum(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setTaskSerial(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setTaskSerial(cursor.isNull(offset + 10) ? null : cursor.getLong(offset + 10));
      }
     
     @Override

@@ -22,7 +22,6 @@ import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 
 
-
 /**
  * Created by zhou on 2017/11/10.
  */
@@ -40,12 +39,12 @@ public class ShotScreenUtils {
     private int windowWidth;
     private int windowHeight;
     private Context context;
-
-
+    private MyApplication mInstan;
 
 
     public ShotScreenUtils(Context context) {
         this.context = context;
+        mInstan = MyApplication.getInstan();
         init();
     }
 
@@ -71,9 +70,8 @@ public class ShotScreenUtils {
     }
 
     public void setUpMediaProjection() {
-        Context mcontext = context.getApplicationContext();
-        mResultData = ((MyApplication) mcontext).getIntent();
-        mResultCode = ((MyApplication) mcontext).getResult();
+        mResultData = mInstan.getIntent();
+        mResultCode = mInstan.getResult();
         if (mResultCode == 0 || mResultData == null) {
 //            Toast.makeText(context, "没有获取到权限", Toast.LENGTH_SHORT).show();
         } else {
@@ -125,8 +123,10 @@ public class ShotScreenUtils {
 
     public int createPNG(Bitmap bitmap, String filename) {
         File file = new File(filename);
-        if(file.exists()){
+        if (file.exists()) {
             file.delete();
+        } else {
+            file.mkdirs();
         }
         try {
             FileOutputStream out = new FileOutputStream(file);

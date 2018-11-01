@@ -10,24 +10,22 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 @Entity
 public class ScriptDetails {
-    @Id
-    @Property(nameInDb = "ID")
+
     private Long id;
     //步骤ID
     private String stepId;
     //步骤序号
-    private String serialNum;
+    private double serialNum;
     //操作类型
-    private String operateType;
+    private int operateType;
     //参数值
     private String paramValue;
     //成功关键字
     private String successKeyword;
     //时间戳
     private int isTimeStamp;//是、否
-
-    @Generated(hash = 1942684944)
-    public ScriptDetails(Long id, String stepId, String serialNum, String operateType,
+    @Generated(hash = 1756487211)
+    public ScriptDetails(Long id, String stepId, double serialNum, int operateType,
             String paramValue, String successKeyword, int isTimeStamp) {
         this.id = id;
         this.stepId = stepId;
@@ -37,66 +35,52 @@ public class ScriptDetails {
         this.successKeyword = successKeyword;
         this.isTimeStamp = isTimeStamp;
     }
-
     @Generated(hash = 1315432966)
     public ScriptDetails() {
     }
-
     public Long getId() {
-        return id;
+        return this.id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
     public String getStepId() {
-        return stepId;
+        return this.stepId;
     }
-
     public void setStepId(String stepId) {
         this.stepId = stepId;
     }
-
-    public String getSerialNum() {
-        return serialNum;
+    public double getSerialNum() {
+        return this.serialNum;
     }
-
-    public void setSerialNum(String serialNum) {
+    public void setSerialNum(double serialNum) {
         this.serialNum = serialNum;
     }
-
-    public String getOperateType() {
-        return operateType;
+    public int getOperateType() {
+        return this.operateType;
     }
-
-    public void setOperateType(String operateType) {
+    public void setOperateType(int operateType) {
         this.operateType = operateType;
     }
-
     public String getParamValue() {
-        return paramValue;
+        return this.paramValue;
     }
-
     public void setParamValue(String paramValue) {
         this.paramValue = paramValue;
     }
-
     public String getSuccessKeyword() {
-        return successKeyword;
+        return this.successKeyword;
     }
-
     public void setSuccessKeyword(String successKeyword) {
         this.successKeyword = successKeyword;
     }
-
     public int getIsTimeStamp() {
-        return isTimeStamp;
+        return this.isTimeStamp;
     }
-
     public void setIsTimeStamp(int isTimeStamp) {
         this.isTimeStamp = isTimeStamp;
     }
+
 
 
 }

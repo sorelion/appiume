@@ -2,7 +2,6 @@ package com.cmit.clouddetection.entry;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.Property;
 import org.greenrobot.greendao.annotation.Generated;
 
 /**
@@ -10,17 +9,16 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 @Entity
 public class Script {
-    @Id
-    @Property(nameInDb = "ID")
+    @Id(autoincrement = true)
     private Long id;
     //脚本ID
-    private Long scriptId;
+    private int scriptId;
     //任务ID
-    private String taskId;
+    private int taskId;
     //策略ID
-    private String strategyId;
+    private int strategyId;
     //运营商
-    private String operator;
+    private int operator;
     //省份
     private String province;
     //业务名称
@@ -32,12 +30,11 @@ public class Script {
     //手机号码
     private String phoneNum;
     //任务流水号
-    private String taskSerial;
-
-    @Generated(hash = 1416229546)
-    public Script(Long id, Long scriptId, String taskId, String strategyId,
-            String operator, String province, String businessName, int aided,
-            String instanceName, String phoneNum, String taskSerial) {
+    private Long taskSerial;
+    @Generated(hash = 1908913599)
+    public Script(Long id, int scriptId, int taskId, int strategyId, int operator,
+            String province, String businessName, int aided, String instanceName,
+            String phoneNum, Long taskSerial) {
         this.id = id;
         this.scriptId = scriptId;
         this.taskId = taskId;
@@ -50,96 +47,74 @@ public class Script {
         this.phoneNum = phoneNum;
         this.taskSerial = taskSerial;
     }
-
     @Generated(hash = 231174866)
     public Script() {
     }
-
-    public Long getScriptId() {
-        return scriptId;
-    }
-
-    public void setScriptId(Long scriptId) {
-        this.scriptId = scriptId;
-    }
-
     public Long getId() {
-        return id;
+        return this.id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
-    public String getTaskId() {
-        return taskId;
+    public int getScriptId() {
+        return this.scriptId;
     }
-
-    public void setTaskId(String taskId) {
+    public void setScriptId(int scriptId) {
+        this.scriptId = scriptId;
+    }
+    public int getTaskId() {
+        return this.taskId;
+    }
+    public void setTaskId(int taskId) {
         this.taskId = taskId;
     }
-
-    public String getStrategyId() {
-        return strategyId;
+    public int getStrategyId() {
+        return this.strategyId;
     }
-
-    public void setStrategyId(String strategyId) {
+    public void setStrategyId(int strategyId) {
         this.strategyId = strategyId;
     }
-
-    public String getOperator() {
-        return operator;
+    public int getOperator() {
+        return this.operator;
     }
-
-    public void setOperator(String operator) {
+    public void setOperator(int operator) {
         this.operator = operator;
     }
-
     public String getProvince() {
-        return province;
+        return this.province;
     }
-
     public void setProvince(String province) {
         this.province = province;
     }
-
     public String getBusinessName() {
-        return businessName;
+        return this.businessName;
     }
-
     public void setBusinessName(String businessName) {
         this.businessName = businessName;
     }
-
     public int getAided() {
-        return aided;
+        return this.aided;
     }
-
     public void setAided(int aided) {
         this.aided = aided;
     }
-
     public String getInstanceName() {
-        return instanceName;
+        return this.instanceName;
     }
-
     public void setInstanceName(String instanceName) {
         this.instanceName = instanceName;
     }
-
     public String getPhoneNum() {
-        return phoneNum;
+        return this.phoneNum;
     }
-
     public void setPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
     }
-
-    public String getTaskSerial() {
-        return taskSerial;
+    public Long getTaskSerial() {
+        return this.taskSerial;
     }
-
-    public void setTaskSerial(String taskSerial) {
+    public void setTaskSerial(Long taskSerial) {
         this.taskSerial = taskSerial;
     }
+
 }

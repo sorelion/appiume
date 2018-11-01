@@ -91,6 +91,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             binder = ((ObtainTaskService.taskFrequencyController) iBinder);
         }
+
         // 服务奔溃或者被杀掉执行
         @Override
         public void onServiceDisconnected(ComponentName componentName) {

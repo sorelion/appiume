@@ -1,6 +1,7 @@
 package com.cmit.clouddetection.entry;
 
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.ToMany;
 import org.greenrobot.greendao.annotation.Transient;
 
@@ -12,6 +13,8 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 @Entity
 public class TaskResult {
+    @Id(autoincrement = true)
+    private Long id;
     private String taskSerial;//任务流水号
     private String instanceName;//实例名
     private String scriptId;//脚本Id
@@ -23,14 +26,12 @@ public class TaskResult {
     private String endTime;//结束时间
     private String taskResult;//任务结果
     private String phoneNum;//电话号码
-    @Transient
-    @ToMany(referencedJoinProperty = "id")
-    private List<TaskResultDetail> taskResultList;//结果明细
-
-    @Generated(hash = 1677686052)
-    public TaskResult(String taskSerial, String instanceName, String scriptId,
-            String operator, String province, String business, String channel,
-            String beginTime, String endTime, String taskResult, String phoneNum) {
+    @Generated(hash = 722914707)
+    public TaskResult(Long id, String taskSerial, String instanceName,
+            String scriptId, String operator, String province, String business,
+            String channel, String beginTime, String endTime, String taskResult,
+            String phoneNum) {
+        this.id = id;
         this.taskSerial = taskSerial;
         this.instanceName = instanceName;
         this.scriptId = scriptId;
@@ -43,104 +44,80 @@ public class TaskResult {
         this.taskResult = taskResult;
         this.phoneNum = phoneNum;
     }
-
     @Generated(hash = 1527756526)
     public TaskResult() {
     }
-
-    public String getTaskSerial() {
-        return taskSerial;
+    public Long getId() {
+        return this.id;
     }
-
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public String getTaskSerial() {
+        return this.taskSerial;
+    }
     public void setTaskSerial(String taskSerial) {
         this.taskSerial = taskSerial;
     }
-
     public String getInstanceName() {
-        return instanceName;
+        return this.instanceName;
     }
-
     public void setInstanceName(String instanceName) {
         this.instanceName = instanceName;
     }
-
     public String getScriptId() {
-        return scriptId;
+        return this.scriptId;
     }
-
     public void setScriptId(String scriptId) {
         this.scriptId = scriptId;
     }
-
     public String getOperator() {
-        return operator;
+        return this.operator;
     }
-
     public void setOperator(String operator) {
         this.operator = operator;
     }
-
     public String getProvince() {
-        return province;
+        return this.province;
     }
-
     public void setProvince(String province) {
         this.province = province;
     }
-
     public String getBusiness() {
-        return business;
+        return this.business;
     }
-
     public void setBusiness(String business) {
         this.business = business;
     }
-
     public String getChannel() {
-        return channel;
+        return this.channel;
     }
-
     public void setChannel(String channel) {
         this.channel = channel;
     }
-
     public String getBeginTime() {
-        return beginTime;
+        return this.beginTime;
     }
-
     public void setBeginTime(String beginTime) {
         this.beginTime = beginTime;
     }
-
     public String getEndTime() {
-        return endTime;
+        return this.endTime;
     }
-
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-
     public String getTaskResult() {
-        return taskResult;
+        return this.taskResult;
     }
-
     public void setTaskResult(String taskResult) {
         this.taskResult = taskResult;
     }
-
     public String getPhoneNum() {
-        return phoneNum;
+        return this.phoneNum;
     }
-
     public void setPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
     }
 
-    public List<TaskResultDetail> getTaskResultList() {
-        return taskResultList;
-    }
-
-    public void setTaskResultList(List<TaskResultDetail> taskResultList) {
-        this.taskResultList = taskResultList;
-    }
 }

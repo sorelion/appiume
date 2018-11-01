@@ -14,7 +14,7 @@ android {
 
     greendao {
         //版本号，升级时可配置
-        schemaVersion 3
+        schemaVersion 9
         daoPackage 'com.cmit.clouddetection.dao'
         targetGenDir 'src/main/java'
     }

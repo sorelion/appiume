@@ -12,7 +12,7 @@ public class TaskInfo {
     /**
      * code : 0
      * msg : 操作成功!
-     * data : {"id":1,"instanceName":"2018-10-17 12:00:00","taskStatus":1,"terminalResourceMark":null,"phoneNum":null,"taskId":1,"scriptId":1,"strategyId":1,"taskSerial":1540281098753,"operator":1,"provinceName":"广东","businessName":"流量查询","channel":1,"isAided":null,"uselocalnum":0,"smsVerifycodeConfigs":[],"scriptInfos":[{"id":1,"serialNum":1,"operateType":1,"paramValue":"ChinaMobile","successKeyword":"","isTimestamp":null,"scriptId":1},{"id":2,"serialNum":2,"operateType":2,"paramValue":"我的","successKeyword":"","isTimestamp":null,"scriptId":1},{"id":3,"serialNum":3,"operateType":2,"paramValue":"我的流量","successKeyword":"流量","isTimestamp":null,"scriptId":1}]}
+     * data : {"id":1,"instanceName":"2018-10-17 12:00:00","phoneNum":"13733153625","taskId":1,"scriptId":1,"strategyId":1,"taskSerial":1540976424359,"operator":1,"provinceName":"河南","businessName":"流量查询","channel":1,"isAided":1,"useLocalNum":0,"smsVerifycodeConfigs":[{"id":1,"keyword":"短信验证码是：","length":6}],"scriptInfos":[{"id":6,"serialNum":0.5,"operateType":2,"paramValue":"com.greenpoint.android.mc10086.activity","successKeyword":null,"isTimestamp":0,"scriptId":1},{"id":1,"serialNum":1,"operateType":1,"paramValue":"com.greenpoint.android.mc10086.activity/com.leadeon.cmcc.base.StartPageActivity","successKeyword":"","isTimestamp":0,"scriptId":1},{"id":5,"serialNum":1.1,"operateType":10,"paramValue":"5","successKeyword":"","isTimestamp":0,"scriptId":1},{"id":13,"serialNum":1.2,"operateType":6,"paramValue":null,"successKeyword":null,"isTimestamp":0,"scriptId":1},{"id":2,"serialNum":2,"operateType":3,"paramValue":"我的","successKeyword":"","isTimestamp":0,"scriptId":1},{"id":3,"serialNum":3,"operateType":10,"paramValue":"2","successKeyword":"","isTimestamp":0,"scriptId":1},{"id":4,"serialNum":4,"operateType":3,"paramValue":"流量管家","successKeyword":"","isTimestamp":0,"scriptId":1},{"id":7,"serialNum":5,"operateType":10,"paramValue":"3","successKeyword":null,"isTimestamp":0,"scriptId":1},{"id":8,"serialNum":6,"operateType":4,"paramValue":"resourceId=com.greenpoint.android.mc10086.activity:id/user_phoneno_edt","successKeyword":"#phoneno","isTimestamp":0,"scriptId":1},{"id":9,"serialNum":7,"operateType":3,"paramValue":"获取验证码","successKeyword":null,"isTimestamp":0,"scriptId":1},{"id":10,"serialNum":8,"operateType":8,"paramValue":"resourceId=com.greenpoint.android.mc10086.activity:id/user_login_smspassword_edt","successKeyword":"1","isTimestamp":0,"scriptId":1},{"id":11,"serialNum":9,"operateType":3,"paramValue":"登录","successKeyword":"流量总量>>剩余 ","isTimestamp":1,"scriptId":1},{"id":12,"serialNum":10,"operateType":9,"paramValue":"com.greenpoint.android.mc10086.activity","successKeyword":null,"isTimestamp":0,"scriptId":1}]}
      */
 
     private int code;
@@ -47,28 +47,24 @@ public class TaskInfo {
         /**
          * id : 1
          * instanceName : 2018-10-17 12:00:00
-         * taskStatus : 1
-         * terminalResourceMark : null
-         * phoneNum : null
+         * phoneNum : 13733153625
          * taskId : 1
          * scriptId : 1
          * strategyId : 1
-         * taskSerial : 1540281098753
+         * taskSerial : 1540976424359
          * operator : 1
-         * provinceName : 广东
+         * provinceName : 河南
          * businessName : 流量查询
          * channel : 1
-         * isAided : null
-         * uselocalnum : 0
-         * smsVerifycodeConfigs : []
-         * scriptInfos : [{"id":1,"serialNum":1,"operateType":1,"paramValue":"ChinaMobile","successKeyword":"","isTimestamp":null,"scriptId":1},{"id":2,"serialNum":2,"operateType":2,"paramValue":"我的","successKeyword":"","isTimestamp":null,"scriptId":1},{"id":3,"serialNum":3,"operateType":2,"paramValue":"我的流量","successKeyword":"流量","isTimestamp":null,"scriptId":1}]
+         * isAided : 1
+         * useLocalNum : 0
+         * smsVerifycodeConfigs : [{"id":1,"keyword":"短信验证码是：","length":6}]
+         * scriptInfos : [{"id":6,"serialNum":0.5,"operateType":2,"paramValue":"com.greenpoint.android.mc10086.activity","successKeyword":null,"isTimestamp":0,"scriptId":1},{"id":1,"serialNum":1,"operateType":1,"paramValue":"com.greenpoint.android.mc10086.activity/com.leadeon.cmcc.base.StartPageActivity","successKeyword":"","isTimestamp":0,"scriptId":1},{"id":5,"serialNum":1.1,"operateType":10,"paramValue":"5","successKeyword":"","isTimestamp":0,"scriptId":1},{"id":13,"serialNum":1.2,"operateType":6,"paramValue":null,"successKeyword":null,"isTimestamp":0,"scriptId":1},{"id":2,"serialNum":2,"operateType":3,"paramValue":"我的","successKeyword":"","isTimestamp":0,"scriptId":1},{"id":3,"serialNum":3,"operateType":10,"paramValue":"2","successKeyword":"","isTimestamp":0,"scriptId":1},{"id":4,"serialNum":4,"operateType":3,"paramValue":"流量管家","successKeyword":"","isTimestamp":0,"scriptId":1},{"id":7,"serialNum":5,"operateType":10,"paramValue":"3","successKeyword":null,"isTimestamp":0,"scriptId":1},{"id":8,"serialNum":6,"operateType":4,"paramValue":"resourceId=com.greenpoint.android.mc10086.activity:id/user_phoneno_edt","successKeyword":"#phoneno","isTimestamp":0,"scriptId":1},{"id":9,"serialNum":7,"operateType":3,"paramValue":"获取验证码","successKeyword":null,"isTimestamp":0,"scriptId":1},{"id":10,"serialNum":8,"operateType":8,"paramValue":"resourceId=com.greenpoint.android.mc10086.activity:id/user_login_smspassword_edt","successKeyword":"1","isTimestamp":0,"scriptId":1},{"id":11,"serialNum":9,"operateType":3,"paramValue":"登录","successKeyword":"流量总量>>剩余 ","isTimestamp":1,"scriptId":1},{"id":12,"serialNum":10,"operateType":9,"paramValue":"com.greenpoint.android.mc10086.activity","successKeyword":null,"isTimestamp":0,"scriptId":1}]
          */
 
         private int id;
         private String instanceName;
-        private int taskStatus;
-        private Object terminalResourceMark;
-        private Object phoneNum;
+        private String phoneNum;
         private int taskId;
         private int scriptId;
         private int strategyId;
@@ -77,9 +73,9 @@ public class TaskInfo {
         private String provinceName;
         private String businessName;
         private int channel;
-        private Object isAided;
-        private int uselocalnum;
-        private List<?> smsVerifycodeConfigs;
+        private int isAided;
+        private int useLocalNum;
+        private List<SmsVerifycodeConfigsBean> smsVerifycodeConfigs;
         private List<ScriptInfosBean> scriptInfos;
 
         public int getId() {
@@ -98,27 +94,11 @@ public class TaskInfo {
             this.instanceName = instanceName;
         }
 
-        public int getTaskStatus() {
-            return taskStatus;
-        }
-
-        public void setTaskStatus(int taskStatus) {
-            this.taskStatus = taskStatus;
-        }
-
-        public Object getTerminalResourceMark() {
-            return terminalResourceMark;
-        }
-
-        public void setTerminalResourceMark(Object terminalResourceMark) {
-            this.terminalResourceMark = terminalResourceMark;
-        }
-
-        public Object getPhoneNum() {
+        public String getPhoneNum() {
             return phoneNum;
         }
 
-        public void setPhoneNum(Object phoneNum) {
+        public void setPhoneNum(String phoneNum) {
             this.phoneNum = phoneNum;
         }
 
@@ -186,27 +166,27 @@ public class TaskInfo {
             this.channel = channel;
         }
 
-        public Object getIsAided() {
+        public int getIsAided() {
             return isAided;
         }
 
-        public void setIsAided(Object isAided) {
+        public void setIsAided(int isAided) {
             this.isAided = isAided;
         }
 
-        public int getUselocalnum() {
-            return uselocalnum;
+        public int getUseLocalNum() {
+            return useLocalNum;
         }
 
-        public void setUselocalnum(int uselocalnum) {
-            this.uselocalnum = uselocalnum;
+        public void setUseLocalNum(int useLocalNum) {
+            this.useLocalNum = useLocalNum;
         }
 
-        public List<?> getSmsVerifycodeConfigs() {
+        public List<SmsVerifycodeConfigsBean> getSmsVerifycodeConfigs() {
             return smsVerifycodeConfigs;
         }
 
-        public void setSmsVerifycodeConfigs(List<?> smsVerifycodeConfigs) {
+        public void setSmsVerifycodeConfigs(List<SmsVerifycodeConfigsBean> smsVerifycodeConfigs) {
             this.smsVerifycodeConfigs = smsVerifycodeConfigs;
         }
 
@@ -218,23 +198,59 @@ public class TaskInfo {
             this.scriptInfos = scriptInfos;
         }
 
-        public static class ScriptInfosBean {
+        public static class SmsVerifycodeConfigsBean {
             /**
              * id : 1
-             * serialNum : 1
-             * operateType : 1
-             * paramValue : ChinaMobile
-             * successKeyword :
-             * isTimestamp : null
+             * keyword : 短信验证码是：
+             * length : 6
+             */
+
+            private int id;
+            private String keyword;
+            private int length;
+
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+
+            public String getKeyword() {
+                return keyword;
+            }
+
+            public void setKeyword(String keyword) {
+                this.keyword = keyword;
+            }
+
+            public int getLength() {
+                return length;
+            }
+
+            public void setLength(int length) {
+                this.length = length;
+            }
+        }
+
+        public static class ScriptInfosBean {
+            /**
+             * id : 6
+             * serialNum : 0.5
+             * operateType : 2
+             * paramValue : com.greenpoint.android.mc10086.activity
+             * successKeyword : null
+             * isTimestamp : 0
              * scriptId : 1
              */
 
             private int id;
-            private int serialNum;
+            private double serialNum;
             private int operateType;
             private String paramValue;
             private String successKeyword;
-            private Object isTimestamp;
+            private int isTimestamp;
             private int scriptId;
 
             public int getId() {
@@ -245,11 +261,11 @@ public class TaskInfo {
                 this.id = id;
             }
 
-            public int getSerialNum() {
+            public double getSerialNum() {
                 return serialNum;
             }
 
-            public void setSerialNum(int serialNum) {
+            public void setSerialNum(double serialNum) {
                 this.serialNum = serialNum;
             }
 
@@ -277,11 +293,11 @@ public class TaskInfo {
                 this.successKeyword = successKeyword;
             }
 
-            public Object getIsTimestamp() {
+            public int getIsTimestamp() {
                 return isTimestamp;
             }
 
-            public void setIsTimestamp(Object isTimestamp) {
+            public void setIsTimestamp(int isTimestamp) {
                 this.isTimestamp = isTimestamp;
             }
 

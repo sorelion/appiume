@@ -19,7 +19,6 @@ public class ObtainTaskService extends Service {
     public static final int WHAT_GETTASK = 101;//请求任务标示(重复执行)
     public static final int START_WORK_APP = 102;//开始执行脚本
     private int taskMode;//任务频率   private int taskMode;//任务频率
-    private boolean isAutoLogin = false;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -27,7 +26,7 @@ public class ObtainTaskService extends Service {
             switch (msg.what) {
                 case START_WORK_APP:
                     TaskInfo taskInfo = (TaskInfo) msg.obj;
-                    ThreadPools.excute(new AppWorkRunnable(ObtainTaskService.this, isAutoLogin, taskInfo));
+                    ThreadPools.excute(new AppWorkRunnable(ObtainTaskService.this,  taskInfo));
                     break;
                 case WHAT_GETTASK:
                     //取任务线程

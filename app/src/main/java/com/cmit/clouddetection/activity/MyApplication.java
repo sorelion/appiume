@@ -16,17 +16,23 @@ import com.yanzhenjie.nohttp.NoHttp;
 public class MyApplication extends Application {
 
     private static DaoSession daoSession;
+    private int result;
+    private Intent intent;
+    private static MyApplication mMyApplication;
 
     @Override
     public void onCreate() {
         super.onCreate();
         setupDatabase();
-        Log.i("sore","nohttp初始化完成");
+        Log.i("sore", "nohttp初始化完成");
         NoHttp.initialize(this);
     }
 
     public static MyApplication getInstan() {
-        return new MyApplication();
+        if (mMyApplication == null) {
+            mMyApplication = new MyApplication();
+        }
+        return mMyApplication;
     }
 
     /**
@@ -63,6 +69,5 @@ public class MyApplication extends Application {
         this.intent = intent;
     }
 
-    private int result;
-    private Intent intent;
+
 }

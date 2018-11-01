@@ -52,7 +52,7 @@ public class SocketConnect {
     /*
    * 启动appium自动化测试的框架Socket服务
    * */
-    private static void initBoostrapSocket() throws TaskException, InterruptedException {
+    public static void initBoostrapSocket() throws TaskException, InterruptedException {
         AdbUtils.stopProcess("uiautomator");// 停止之前的uiautomator进程
         // 启动app socket
         // AppDriverEntry该类必须去继承UiAutomatorTestCase---->自动去调用setUp(); 启动Socket服务

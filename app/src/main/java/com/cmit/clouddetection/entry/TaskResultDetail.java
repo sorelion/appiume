@@ -10,23 +10,23 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 @Entity
 public class TaskResultDetail {
-    @Id
-    @Property(nameInDb = "ID")
-    private String scriptId;//脚本Id
-    private String serialNum;//步骤序号
-    private String operateNum;//操作类型
+    private Long id;
+    private int scriptId;//脚本Id
+    private double serialNum;//步骤序号
+    private int operateNum;//操作类型
     private String paramValue;//参数值
     private String successKeyword;//成功关键字
-    private String isTimeStamp;//时间戳
+    private int isTimeStamp;//时间戳
     private String runningResult;//执行结果
     private String singleStepBeginTime;//开始时间
     private String singleStepEndTime;//结束时间
     private String resultScreenShot;//结果截图
-    @Generated(hash = 171434094)
-    public TaskResultDetail(String scriptId, String serialNum, String operateNum,
-            String paramValue, String successKeyword, String isTimeStamp,
+    @Generated(hash = 1199441343)
+    public TaskResultDetail(Long id, int scriptId, double serialNum, int operateNum,
+            String paramValue, String successKeyword, int isTimeStamp,
             String runningResult, String singleStepBeginTime,
             String singleStepEndTime, String resultScreenShot) {
+        this.id = id;
         this.scriptId = scriptId;
         this.serialNum = serialNum;
         this.operateNum = operateNum;
@@ -38,86 +38,75 @@ public class TaskResultDetail {
         this.singleStepEndTime = singleStepEndTime;
         this.resultScreenShot = resultScreenShot;
     }
-
     @Generated(hash = 1372654216)
     public TaskResultDetail() {
     }
-    public String getScriptId() {
-        return scriptId;
+    public Long getId() {
+        return this.id;
     }
-
-    public void setScriptId(String scriptId) {
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public int getScriptId() {
+        return this.scriptId;
+    }
+    public void setScriptId(int scriptId) {
         this.scriptId = scriptId;
     }
-    public String getSerialNum() {
-        return serialNum;
+    public double getSerialNum() {
+        return this.serialNum;
     }
-
-    public void setSerialNum(String serialNum) {
+    public void setSerialNum(double serialNum) {
         this.serialNum = serialNum;
     }
-
-    public String getOperateNum() {
-        return operateNum;
+    public int getOperateNum() {
+        return this.operateNum;
     }
-
-    public void setOperateNum(String operateNum) {
+    public void setOperateNum(int operateNum) {
         this.operateNum = operateNum;
     }
-
     public String getParamValue() {
-        return paramValue;
+        return this.paramValue;
     }
-
     public void setParamValue(String paramValue) {
         this.paramValue = paramValue;
     }
-
     public String getSuccessKeyword() {
-        return successKeyword;
+        return this.successKeyword;
     }
-
     public void setSuccessKeyword(String successKeyword) {
         this.successKeyword = successKeyword;
     }
-
-    public String getIsTimeStamp() {
-        return isTimeStamp;
+    public int getIsTimeStamp() {
+        return this.isTimeStamp;
     }
-
-    public void setIsTimeStamp(String isTimeStamp) {
+    public void setIsTimeStamp(int isTimeStamp) {
         this.isTimeStamp = isTimeStamp;
     }
-
     public String getRunningResult() {
-        return runningResult;
+        return this.runningResult;
     }
-
     public void setRunningResult(String runningResult) {
         this.runningResult = runningResult;
     }
-
     public String getSingleStepBeginTime() {
-        return singleStepBeginTime;
+        return this.singleStepBeginTime;
     }
-
     public void setSingleStepBeginTime(String singleStepBeginTime) {
         this.singleStepBeginTime = singleStepBeginTime;
     }
-
     public String getSingleStepEndTime() {
-        return singleStepEndTime;
+        return this.singleStepEndTime;
     }
-
     public void setSingleStepEndTime(String singleStepEndTime) {
         this.singleStepEndTime = singleStepEndTime;
     }
-
     public String getResultScreenShot() {
-        return resultScreenShot;
+        return this.resultScreenShot;
     }
-
     public void setResultScreenShot(String resultScreenShot) {
         this.resultScreenShot = resultScreenShot;
     }
+
+
 }
