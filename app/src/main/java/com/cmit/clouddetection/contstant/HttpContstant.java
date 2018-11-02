@@ -16,4 +16,6 @@ public interface HttpContstant {
     String UPLOADIMAGE = "/taskExecution/upload";
     //任务结果上传
     String UPLOADRESULT = "/taskExecution/report";
+    //任务手机信息
+    String UPLOADMACHINE = "/machine/upload";
 }

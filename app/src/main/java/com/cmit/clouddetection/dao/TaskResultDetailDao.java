@@ -24,7 +24,7 @@ public class TaskResultDetailDao extends AbstractDao<TaskResultDetail, Void> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, Long.class, "id", false, "ID");
+        public final static Property Id = new Property(0, int.class, "id", false, "ID");
         public final static Property ScriptId = new Property(1, int.class, "scriptId", false, "SCRIPT_ID");
         public final static Property SerialNum = new Property(2, double.class, "serialNum", false, "SERIAL_NUM");
         public final static Property OperateNum = new Property(3, int.class, "operateNum", false, "OPERATE_NUM");
@@ -50,7 +50,7 @@ public class TaskResultDetailDao extends AbstractDao<TaskResultDetail, Void> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"TASK_RESULT_DETAIL\" (" + //
-                "\"ID\" INTEGER," + // 0: id
+                "\"ID\" INTEGER NOT NULL ," + // 0: id
                 "\"SCRIPT_ID\" INTEGER NOT NULL ," + // 1: scriptId
                 "\"SERIAL_NUM\" REAL NOT NULL ," + // 2: serialNum
                 "\"OPERATE_NUM\" INTEGER NOT NULL ," + // 3: operateNum
@@ -72,11 +72,7 @@ public class TaskResultDetailDao extends AbstractDao<TaskResultDetail, Void> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, TaskResultDetail entity) {
         stmt.clearBindings();
- 
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
-        }
+        stmt.bindLong(1, entity.getId());
         stmt.bindLong(2, entity.getScriptId());
         stmt.bindDouble(3, entity.getSerialNum());
         stmt.bindLong(4, entity.getOperateNum());
@@ -116,11 +112,7 @@ public class TaskResultDetailDao extends AbstractDao<TaskResultDetail, Void> {
     @Override
     protected final void bindValues(SQLiteStatement stmt, TaskResultDetail entity) {
         stmt.clearBindings();
- 
-        Long id = entity.getId();
-        if (id != null) {
-            stmt.bindLong(1, id);
-        }
+        stmt.bindLong(1, entity.getId());
         stmt.bindLong(2, entity.getScriptId());
         stmt.bindDouble(3, entity.getSerialNum());
         stmt.bindLong(4, entity.getOperateNum());
@@ -165,7 +157,7 @@ public class TaskResultDetailDao extends AbstractDao<TaskResultDetail, Void> {
     @Override
     public TaskResultDetail readEntity(Cursor cursor, int offset) {
         TaskResultDetail entity = new TaskResultDetail( //
-            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
+            cursor.getInt(offset + 0), // id
             cursor.getInt(offset + 1), // scriptId
             cursor.getDouble(offset + 2), // serialNum
             cursor.getInt(offset + 3), // operateNum
@@ -182,7 +174,7 @@ public class TaskResultDetailDao extends AbstractDao<TaskResultDetail, Void> {
      
     @Override
     public void readEntity(Cursor cursor, TaskResultDetail entity, int offset) {
-        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
+        entity.setId(cursor.getInt(offset + 0));
         entity.setScriptId(cursor.getInt(offset + 1));
         entity.setSerialNum(cursor.getDouble(offset + 2));
         entity.setOperateNum(cursor.getInt(offset + 3));

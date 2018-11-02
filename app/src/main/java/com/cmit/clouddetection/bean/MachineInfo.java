@@ -1,19 +1,25 @@
 package com.cmit.clouddetection.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by pact on 2018/9/26.
  */
 
-public class MachineInfo {
+public class MachineInfo implements Serializable {
+
+
+    private static final long serialVersionUID = 7067975805165927664L;
+
     private String type;//型号
     private String resourceId;//资源编号
     private String imei;//终端标识
     private String imsi;//手机卡标识
     private String phonePosition;//手机位置
     private String connectType;//连接方式（互联网连接，USB连接）
-    private int electricity;//电量
-    private String networkType;//网络制式 0无网络 1 移动网络 2WiFi网络
-    private int appVersion;//App版本
+    private Integer electricity;//电量
+    private Integer networkType;//网络制式 0无网络 1 移动网络 2WiFi网络
+    private Integer appVersion;//App版本
     private String installedSoftInfo;//已安装软件信息
 
     public String getType() {
@@ -81,11 +87,11 @@ public class MachineInfo {
         this.electricity = electricity;
     }
 
-    public String getNetworkType() {
+    public int getNetworkType() {
         return networkType;
     }
 
-    public void setNetworkType(String networkType) {
+    public void setNetworkType(int networkType) {
         this.networkType = networkType;
     }
 

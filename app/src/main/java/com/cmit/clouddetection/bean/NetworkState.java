@@ -9,8 +9,8 @@ public enum NetworkState {
     private String state;
     private int flag;
 
-    public String getState() {
-        return state;
+    public int getState() {
+        return flag;
     }
 
     NetworkState(String state, int i) {

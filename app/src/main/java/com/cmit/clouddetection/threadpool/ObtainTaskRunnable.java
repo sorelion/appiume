@@ -1,15 +1,29 @@
 package com.cmit.clouddetection.threadpool;
+
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
+
+import com.alibaba.fastjson.JSONObject;
 import com.cmit.clouddetection.activity.MyApplication;
 import com.cmit.clouddetection.bean.TaskInfo;
+import com.cmit.clouddetection.contstant.HttpContstant;
 import com.cmit.clouddetection.dao.ScriptDao;
 import com.cmit.clouddetection.dao.ScriptDetailsDao;
 import com.cmit.clouddetection.entry.Script;
 import com.cmit.clouddetection.entry.ScriptDetails;
 import com.cmit.clouddetection.service.ObtainTaskService;
+import com.cmit.clouddetection.utils.LogUtil;
+import com.cmit.clouddetection.utils.SystemUtils;
+import com.cmit.clouddetection.utils.TimerUtils;
 import com.google.gson.Gson;
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.RequestMethod;
+import com.yanzhenjie.nohttp.rest.OnResponseListener;
+import com.yanzhenjie.nohttp.rest.Response;
+import com.yanzhenjie.nohttp.rest.StringRequest;
+
 import java.io.IOException;
 
 /**
@@ -39,7 +53,7 @@ public class ObtainTaskRunnable implements Runnable {
             }
             getData();
             //延时发送信息
-//            handler.sendEmptyMessageDelayed(what, taskMode);
+            handler.sendEmptyMessageDelayed(what, taskMode);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -192,49 +206,49 @@ public class ObtainTaskRunnable implements Runnable {
             "}";
 
     private void getData() throws IOException {
-        TaskInfo taskInfo = new Gson().fromJson(str, TaskInfo.class);
-        //保存数据到数据库
-        saveData(taskInfo);
-        Message message = handler.obtainMessage();
-        message.obj = taskInfo;
-        message.what = ObtainTaskService.START_WORK_APP;
-        handler.sendMessage(message);
-//        String imei = SystemUtils.getImei();
-//        StringRequest stringRequest = (StringRequest) new StringRequest(HttpContstant.URL + HttpContstant.GETTASK, RequestMethod.POST).add("imei","67T7N16413001568");
-//        NoHttp.newRequestQueue().add(0, stringRequest, new OnResponseListener<String>() {
-//            @Override
-//            public void onStart(int what) {
-//            }
-//
-//            @Override
-//            public void onSucceed(int what, Response<String> response) {
-//                JSONObject result = JSONObject.parseObject(response.get());
-//                int code = (Integer) result.get("code");
-//                if (code == 0) {//有数据
-//                    TaskInfo taskInfo = new Gson().fromJson(response.get(), TaskInfo.class);
-//                    //保存数据到数据库
-//                    saveData(taskInfo);
-//                    Message message = handler.obtainMessage();
-//                    message.obj = taskInfo;
-//                    message.what = ObtainTaskService.START_WORK_APP;
-//                    handler.sendMessage(message);
-//                    //没有任务
-//                } else {
-//                    LogUtil.getInstance().increaseLog((String) result.get("msg"), null);
-//                }
-//                Log.i("sore", "onSucceed");
-//            }
-//
-//            @Override
-//            public void onFailed(int what, Response<String> response) {
-//                Log.i("sore", "onFailed");
-//            }
-//
-//            @Override
-//            public void onFinish(int what) {
-//                Log.i("sore", "onFinish");
-//            }
-//        });
+//        TaskInfo taskInfo = new Gson().fromJson(str, TaskInfo.class);
+//        //保存数据到数据库
+//        saveData(taskInfo);
+//        Message message = handler.obtainMessage();
+//        message.obj = taskInfo;
+//        message.what = ObtainTaskService.START_WORK_APP;
+//        handler.sendMessage(message);
+        String imei = SystemUtils.getImei();
+        StringRequest stringRequest = (StringRequest) new StringRequest(HttpContstant.URL + HttpContstant.GETTASK, RequestMethod.POST).add("imei", "67T7N16413001568");
+        NoHttp.newRequestQueue().add(0, stringRequest, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                JSONObject result = JSONObject.parseObject(response.get());
+                int code = (Integer) result.get("code");
+                if (code == 0) {//有数据
+                    TaskInfo taskInfo = new Gson().fromJson(response.get(), TaskInfo.class);
+                    //保存数据到数据库
+                    saveData(taskInfo);
+                    Message message = handler.obtainMessage();
+                    message.obj = taskInfo;
+                    message.what = ObtainTaskService.START_WORK_APP;
+                    handler.sendMessage(message);
+                    //没有任务
+                } else {
+                    LogUtil.getInstance().increaseLog((String) result.get("msg"), null);
+                }
+                Log.i("sore", "onSucceed");
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+                Log.i("sore", "onFailed");
+            }
+
+            @Override
+            public void onFinish(int what) {
+                Log.i("sore", "onFinish");
+            }
+        });
 
 
     }

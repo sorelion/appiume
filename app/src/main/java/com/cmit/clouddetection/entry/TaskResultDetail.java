@@ -10,7 +10,7 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 @Entity
 public class TaskResultDetail {
-    private Long id;
+    private int id;
     private int scriptId;//脚本Id
     private double serialNum;//步骤序号
     private int operateNum;//操作类型
@@ -21,8 +21,8 @@ public class TaskResultDetail {
     private String singleStepBeginTime;//开始时间
     private String singleStepEndTime;//结束时间
     private String resultScreenShot;//结果截图
-    @Generated(hash = 1199441343)
-    public TaskResultDetail(Long id, int scriptId, double serialNum, int operateNum,
+    @Generated(hash = 1200849650)
+    public TaskResultDetail(int id, int scriptId, double serialNum, int operateNum,
             String paramValue, String successKeyword, int isTimeStamp,
             String runningResult, String singleStepBeginTime,
             String singleStepEndTime, String resultScreenShot) {
@@ -41,10 +41,10 @@ public class TaskResultDetail {
     @Generated(hash = 1372654216)
     public TaskResultDetail() {
     }
-    public Long getId() {
+    public int getId() {
         return this.id;
     }
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
     public int getScriptId() {
@@ -107,6 +107,5 @@ public class TaskResultDetail {
     public void setResultScreenShot(String resultScreenShot) {
         this.resultScreenShot = resultScreenShot;
     }
-
 
 }

@@ -41,12 +41,111 @@ public class TaskResultDetailInfo implements Serializable {
     private Integer runningResult;
 
     // 单个步骤开始时间
-    private Date singleStepBeginTime;
+    private String singleStepBeginTime;
 
     // 单个步骤结束时间
-    private Date singleStepEndTime;
+    private String singleStepEndTime;
 
     // 结果截图(URL方式保存截图)
     private String resultScreenshot;
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Integer getDetailId() {
+        return detailId;
+    }
+
+    public void setDetailId(Integer detailId) {
+        this.detailId = detailId;
+    }
+
+    public Integer getResultId() {
+        return resultId;
+    }
+
+    public void setResultId(Integer resultId) {
+        this.resultId = resultId;
+    }
+
+    public Integer getStepId() {
+        return stepId;
+    }
+
+    public void setStepId(Integer stepId) {
+        this.stepId = stepId;
+    }
+
+    public float getSerialNum() {
+        return serialNum;
+    }
+
+    public void setSerialNum(float serialNum) {
+        this.serialNum = serialNum;
+    }
+
+    public Integer getOperateType() {
+        return operateType;
+    }
+
+    public void setOperateType(Integer operateType) {
+        this.operateType = operateType;
+    }
+
+    public String getParamValue() {
+        return paramValue;
+    }
+
+    public void setParamValue(String paramValue) {
+        this.paramValue = paramValue;
+    }
+
+    public String getSuccessKeyword() {
+        return successKeyword;
+    }
+
+    public void setSuccessKeyword(String successKeyword) {
+        this.successKeyword = successKeyword;
+    }
+
+    public Integer getIsTimestamp() {
+        return isTimestamp;
+    }
+
+    public void setIsTimestamp(Integer isTimestamp) {
+        this.isTimestamp = isTimestamp;
+    }
+
+    public Integer getRunningResult() {
+        return runningResult;
+    }
+
+    public void setRunningResult(Integer runningResult) {
+        this.runningResult = runningResult;
+    }
+
+    public String getSingleStepBeginTime() {
+        return singleStepBeginTime;
+    }
+
+    public void setSingleStepBeginTime(String singleStepBeginTime) {
+        this.singleStepBeginTime = singleStepBeginTime;
+    }
+
+    public String getSingleStepEndTime() {
+        return singleStepEndTime;
+    }
+
+    public void setSingleStepEndTime(String singleStepEndTime) {
+        this.singleStepEndTime = singleStepEndTime;
+    }
+
+    public String getResultScreenshot() {
+        return resultScreenshot;
+    }
+
+    public void setResultScreenshot(String resultScreenshot) {
+        this.resultScreenshot = resultScreenshot;
+    }
 }

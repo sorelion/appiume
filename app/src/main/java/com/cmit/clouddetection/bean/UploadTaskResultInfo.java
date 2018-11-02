@@ -42,10 +42,10 @@ public class UploadTaskResultInfo implements Serializable {
     private Integer stratrgyId;
 
     // 开始时间
-    private Date beginTime;
+    private Long beginTime;
 
     // 结束时间
-    private Date endTime;
+    private Long endTime;
 
     // 计时步骤开始时间
     private Date timingBeginTime;
@@ -140,19 +140,19 @@ public class UploadTaskResultInfo implements Serializable {
         this.stratrgyId = stratrgyId;
     }
 
-    public Date getBeginTime() {
+    public Long getBeginTime() {
         return beginTime;
     }
 
-    public void setBeginTime(Date beginTime) {
+    public void setBeginTime(Long beginTime) {
         this.beginTime = beginTime;
     }
 
-    public Date getEndTime() {
+    public Long getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(Long endTime) {
         this.endTime = endTime;
     }
 

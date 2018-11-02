@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //开启上传手机信息服务
         startService(new Intent(this, UploadMachineInfoService.class));
         //开启获取任务服务
-        startService(new Intent(this, ObtainTaskService.class));
+//        startService(new Intent(this, ObtainTaskService.class));
     }
 
     private void ininListener() {

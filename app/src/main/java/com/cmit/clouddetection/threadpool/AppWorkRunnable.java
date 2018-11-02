@@ -43,9 +43,7 @@ import com.yanzhenjie.nohttp.RequestMethod;
 import com.yanzhenjie.nohttp.rest.OnResponseListener;
 import com.yanzhenjie.nohttp.rest.Response;
 import com.yanzhenjie.nohttp.rest.StringRequest;
-
 import java.io.ByteArrayOutputStream;
-
 import java.io.OutputStream;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -53,8 +51,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import freemarker.template.utility.StringUtil;
 
 
 /**
@@ -78,8 +74,6 @@ public class AppWorkRunnable implements Runnable {
         mTaskResultDetailDao = MyApplication.getDaoInstant().getTaskResultDetailDao();
         ThreadPools.iswork = true;
         startAppWork();
-        UploadTaskRunnbale uploadTaskRunnbale = new UploadTaskRunnbale(null, 0, context);
-        uploadTaskRunnbale.uploadLog(taskInfo);
         ThreadPools.iswork = false;
         synchronized (ThreadPools.getThreadLock()) {
             ThreadPools.getThreadLock().notifyAll();
@@ -104,6 +98,8 @@ public class AppWorkRunnable implements Runnable {
             }
             totalTime.stopTime();
             SocketConnect.close(); //断开socket连接
+            UploadTaskRunnbale uploadTaskRunnbale = new UploadTaskRunnbale(null, 0, context);
+            uploadTaskRunnbale.uploadLog(taskInfo, totalTime);
             saveResult("成功", null, totalTime);
         } catch (Exception e) {
             if (e instanceof TaskException) {
@@ -173,42 +169,42 @@ public class AppWorkRunnable implements Runnable {
         //(1.启动APP，2.清缓存，3.点击，4.输入，5.回退，6.截图，7.滑动，8.短信验证码，9.关闭APP,10.等待)
         switch (operateType) {
             case 1:  // 启动APP
-//                Log.i("sore", "启动APP");
-//                if (!paramValue.isEmpty()) {
-//                    String cmd = "am start -W -n " + paramValue + " -S";
-//                    timerUtils.startTime();
-//                    String[] split = paramValue.split("/");
-//                    //判断包名是否正确
-//                    boolean avilible = AdbUtils.isAvilible(context, split[0]);
-//                    if (avilible) {
-//                        int cmdResult = AdbUtils.execShellCmdSilent(cmd);
-//                        timerUtils.stopTime();
-//                        saveDataForResult(listBean, timerUtils, cmdResult, null);
-//                    } else {
-//                        LogUtil.getInstance().increaseLog("APP不存在", null);
-//                        timerUtils.stopTime();
-//                        saveDataForResult(listBean, timerUtils, 1, null);
-//                        throw new TaskException("APP找不到，启动失败");
-//                    }
-//                } else {
-//                    LogUtil.getInstance().increaseLog("启动APP脚本异常", null);
-//                    timerUtils.stopTime();
-//                    saveDataForResult(listBean, timerUtils, 1, null);
-//                    throw new TaskException("启动APP脚本异常");
-//                }
+                Log.i("sore", "启动APP");
+                if (!paramValue.isEmpty()) {
+                    String cmd = "am start -W -n " + paramValue + " -S";
+                    timerUtils.startTime();
+                    String[] split = paramValue.split("/");
+                    //判断包名是否正确
+                    boolean avilible = AdbUtils.isAvilible(context, split[0]);
+                    if (avilible) {
+                        int cmdResult = AdbUtils.execShellCmdSilent(cmd);
+                        timerUtils.stopTime();
+                        saveDataForResult(listBean, timerUtils, cmdResult, null);
+                    } else {
+                        LogUtil.getInstance().increaseLog("APP不存在", null);
+                        timerUtils.stopTime();
+                        saveDataForResult(listBean, timerUtils, 1, null);
+                        throw new TaskException("APP找不到，启动失败");
+                    }
+                } else {
+                    LogUtil.getInstance().increaseLog("启动APP脚本异常", null);
+                    timerUtils.stopTime();
+                    saveDataForResult(listBean, timerUtils, 1, null);
+                    throw new TaskException("启动APP脚本异常");
+                }
                 break;
             case 2: //清缓存
-//                Log.i("sore", "清缓存");
-//                if (!paramValue.isEmpty()) {
-//                    String cmd = "pm clear " + paramValue;
-//                    timerUtils.startTime();
-//                    int result = AdbUtils.execShellCmdSilent(cmd);
-//                    saveDataForResult(listBean, timerUtils, result, null);
-//                    timerUtils.stopTime();
-//                } else {
-//                    LogUtil.getInstance().increaseLog("清缓存脚本异常", null);
-//                    throw new TaskException("清缓存脚本异常");
-//                }
+                Log.i("sore", "清缓存");
+                if (!paramValue.isEmpty()) {
+                    String cmd = "pm clear " + paramValue;
+                    timerUtils.startTime();
+                    int result = AdbUtils.execShellCmdSilent(cmd);
+                    saveDataForResult(listBean, timerUtils, result, null);
+                    timerUtils.stopTime();
+                } else {
+                    LogUtil.getInstance().increaseLog("清缓存脚本异常", null);
+                    throw new TaskException("清缓存脚本异常");
+                }
                 break;
             case 3: // 点击
                 Map<String, String> valueMap = extratTarget(paramValue);
@@ -260,27 +256,27 @@ public class AppWorkRunnable implements Runnable {
                         break;
                     //配置文字
                     case "text":
-//                        SocketConnect.initBoostrapSocket(); //每次任务初始化一次
-//                        Socket socket = new Socket("localhost", 4724); //创建连接
-//                        socket.isConnected();
-//                        OutputStream os = socket.getOutputStream();
-//                        ShotScreenUtils shotScreenUtils = new ShotScreenUtils(context);
-//                        Bitmap bitmap = shotScreenUtils.startCapture(500); //截图操作
-//                        String imgBase64 = imageToBase(bitmap);
-//                        //UGCOCR 的上传报文格式：{//图像数据：base64编码，要求base64编码后大小不超过4M，最短边至少15px，最长边最大4096px，支持jpg/png/bmp格式，和url参数只能同时存在一个\"img\":\"\",//图像url地址：图片完整URL，URL长度不超过1024字节，URL对应的图片base64编码后大小不超过4M，最短边至少15px，最长边最大4096px，支持jpg/png/bmp格式，和img参数只能同时存在一个\"url\":\"\",//是否需要识别结果中每一行的置信度，默认不需要。true：需要false：不需要\"prob\":false}";
-//                        String body = "{\"img\": \"" + imgBase64 + "\",\"configure\":{ \"min_size\" : 16, \"prob\" : false }}";
-//                        Demo_lyocr_general_ugc ugc = new Demo_lyocr_general_ugc();
-//                        ugc.ocrUgcHttpsTest(body);
-//                        Thread.sleep(15000);
-//                        ugc_result result = new Gson().fromJson(Constants.AliResult, ugc_result.class);
-//                        Point point = getResultPointByUGC(result.getPrism_wordsInfo(), paramValue);
-//                        String cmd = "{\"cmd\":\"action\",\"action\":\"click\",\"params\":{\"x\":" + point.x + ",\"y\":" + point.y + "}}";
-//                        Thread.sleep(5000);
-//                        String jsonString = cmd + String.valueOf(c);
-//                        os.write((jsonString).getBytes("utf-8"));
-//                        os.flush();
-//                        os.close();
-//                        socket.close();
+                        SocketConnect.initBoostrapSocket(); //每次任务初始化一次
+                        Socket socket = new Socket("localhost", 4724); //创建连接
+                        socket.isConnected();
+                        OutputStream os = socket.getOutputStream();
+                        ShotScreenUtils shotScreenUtils = new ShotScreenUtils(context);
+                        Bitmap bitmap = shotScreenUtils.startCapture(500); //截图操作
+                        String imgBase64 = imageToBase(bitmap);
+                        //UGCOCR 的上传报文格式：{//图像数据：base64编码，要求base64编码后大小不超过4M，最短边至少15px，最长边最大4096px，支持jpg/png/bmp格式，和url参数只能同时存在一个\"img\":\"\",//图像url地址：图片完整URL，URL长度不超过1024字节，URL对应的图片base64编码后大小不超过4M，最短边至少15px，最长边最大4096px，支持jpg/png/bmp格式，和img参数只能同时存在一个\"url\":\"\",//是否需要识别结果中每一行的置信度，默认不需要。true：需要false：不需要\"prob\":false}";
+                        String body = "{\"img\": \"" + imgBase64 + "\",\"configure\":{ \"min_size\" : 16, \"prob\" : false }}";
+                        Demo_lyocr_general_ugc ugc = new Demo_lyocr_general_ugc();
+                        ugc.ocrUgcHttpsTest(body);
+                        Thread.sleep(15000);
+                        ugc_result result = new Gson().fromJson(Constants.AliResult, ugc_result.class);
+                        Point point = getResultPointByUGC(result.getPrism_wordsInfo(), paramValue);
+                        String cmd = "{\"cmd\":\"action\",\"action\":\"click\",\"params\":{\"x\":" + point.x + ",\"y\":" + point.y + "}}";
+                        Thread.sleep(5000);
+                        String jsonString = cmd + String.valueOf(c);
+                        os.write((jsonString).getBytes("utf-8"));
+                        os.flush();
+                        os.close();
+                        socket.close();
                         break;
                 }
                 break;
@@ -294,11 +290,11 @@ public class AppWorkRunnable implements Runnable {
                 String requestJson = JSON.toJSONString(socketRequest);
                 requestJson = requestJson + String.valueOf(c);
                 String scriptResult = SocketConnect.send(requestJson);
-//                        LogUtil.getInstance().increaseLog(scriptResult, null);
-//                        if (scriptResult.contains("status")) {
-//                            JSONObject jsonObject = (JSONObject) JSON.parse(scriptResult);
-//                            int status = (int) jsonObject.get("status");
-//                            if (status == 0) {
+                LogUtil.getInstance().increaseLog(scriptResult, null);
+                if (scriptResult.contains("status")) {
+                    JSONObject jsonObject = (JSONObject) JSON.parse(scriptResult);
+                    int status = (int) jsonObject.get("status");
+//                    if (status == 0) {
 //                        JSONObject value = (JSONObject) jsonObject.get("value");
 //                        String elementid = (String) value.get("ELEMENT");
 ////                        String text = valueMap.get(VALUE); //取参数
@@ -309,7 +305,7 @@ public class AppWorkRunnable implements Runnable {
 //                        timerUtils.startTime();
 //                        scriptResult = SocketConnect.send(requestJson);
 //                    }
-//                }
+                }
 //                checkSocketRespone("" + scriptId, scriptResult, timerUtils);
                 break;
             case 5: // 点击回退键
@@ -322,8 +318,8 @@ public class AppWorkRunnable implements Runnable {
                 break;
             case 6: //截图
                 Log.i("sore", "截图");
-                String time = LogUtil.timeStamp2Date(String.valueOf(System.currentTimeMillis()));
-                String picPath = Environment.getExternalStorageDirectory().getPath() + "/CloudDetectionVI/screen.png";
+                String time = String.valueOf(System.currentTimeMillis());
+                String picPath = Environment.getExternalStorageDirectory().getPath() + "/CloudDetectionVI/" + time + ".png";
                 timerUtils.startTime();// 打开计时器
                 ShotScreenUtils shotScreenUtils = new ShotScreenUtils(context);
                 Bitmap bitmap = shotScreenUtils.startCapture(500); //截图操作
@@ -331,46 +327,46 @@ public class AppWorkRunnable implements Runnable {
                 //保存到sd卡
 //                shotScreenUtils.createPNG(bitmap, picPath);
                 saveDataForResult(listBean, timerUtils, 0, null);
-//                try {
-//                    StringRequest stringRequest = (StringRequest) new StringRequest(HttpContstant.URL + HttpContstant.UPLOADIMAGE, RequestMethod.POST).add("file", new BitmapBinary(bitmap, "screen.png"));
-//                    NoHttp.newRequestQueue().add(1, stringRequest, new OnResponseListener<String>() {
-//                        @Override
-//                        public void onStart(int what) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onSucceed(int what, Response<String> response) {
-//                            JSONObject result = JSONObject.parseObject(response.get());
-//                            int code = (Integer) result.get("code");
-//                            try {
-//                                if (code == 0) {
-//                                    saveDataForResult(listBean, timerUtils, 0, ((String) result.get("data")));
-//                                } else {
-//                                    saveDataForResult(listBean, timerUtils, 1, null);
-//                                }
-//                            } catch (TaskException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailed(int what, Response<String> response) {
-//                            try {
-//                                saveDataForResult(listBean, timerUtils, 1, null);
-//                            } catch (TaskException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFinish(int what) {
-//
-//                        }
-//                    });
-//                } catch (Exception e) {
-//                    throw new TaskException("截图上传失败");
-//                }
+                try {
+                    StringRequest stringRequest = (StringRequest) new StringRequest(HttpContstant.URL + HttpContstant.UPLOADIMAGE, RequestMethod.POST).add("file", new BitmapBinary(bitmap, time + ".png"));
+                    NoHttp.newRequestQueue().add(1, stringRequest, new OnResponseListener<String>() {
+                        @Override
+                        public void onStart(int what) {
+
+                        }
+
+                        @Override
+                        public void onSucceed(int what, Response<String> response) {
+                            JSONObject result = JSONObject.parseObject(response.get());
+                            int code = (Integer) result.get("code");
+                            try {
+                                if (code == 0) {
+                                    saveDataForResult(listBean, timerUtils, 0, ((String) result.get("data")));
+                                } else {
+                                    saveDataForResult(listBean, timerUtils, 1, null);
+                                }
+                            } catch (TaskException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailed(int what, Response<String> response) {
+                            try {
+                                saveDataForResult(listBean, timerUtils, 1, null);
+                            } catch (TaskException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFinish(int what) {
+
+                        }
+                    });
+                } catch (Exception e) {
+                    throw new TaskException("截图上传失败");
+                }
                 break;
 
             case 7: // 滑动
@@ -407,51 +403,51 @@ public class AppWorkRunnable implements Runnable {
 
                 break;
             case 8: //短信验证码
-//                String keyword = smsverify.getKeyword();
-//                int length = smsverify.getLength();
-//                Log.i("sore", "短信验证码");
-//                Long currentTime = 0L;// 当前时间计时
-//                boolean isTimeOut = false;//是否超时
-//                String content = null;
-//                while (!isTimeOut) {
-//                    Thread.sleep(1000 * 10);
-//                    currentTime += 1000 * 10;
-//                    SMSInfo smsInfo = getFirstSmsInfo(context);
-//                    if (smsInfo != null) {
-//                        content = smsInfo.getContent();
-//                        isTimeOut = true;
-//                    }
-//                    if (currentTime > 1000 * 60) {
-//                        saveDataForResult(listBean, timerUtils, 1, null);
-//                        throw new TaskException("验证码超时");
-//                    }
-//                }
-//                String[] split = content.split(keyword);
-//                content = split[1].substring(0, length + 1);
-//                timerUtils.startTime();
-//                //取出操作对象
-//                paramValue = extratTarget(paramValue).get(VALUE);
-//                params = new Parameters("id", paramValue, "", "", false);
-//                socketRequest = new SocketRequest("action", "find", params);
-//                requestJson = JSON.toJSONString(socketRequest);
-//                requestJson = requestJson + String.valueOf(c);
-//                scriptResult = SocketConnect.send(requestJson);
-//                if (scriptResult.contains("status")) {
-//                    JSONObject jsonObject = (JSONObject) JSON.parse(scriptResult);
-//                    int status = (int) jsonObject.get("status");
-//                    if (status == 0) {
-//                        JSONObject value1 = (JSONObject) jsonObject.get("value");
-//                        String elementid = (String) value1.get("ELEMENT");
-//                        params = new Parameters(elementid, content, false, true);
-//                        socketRequest = new SocketRequest("action", "element:setText", params);
-//                        requestJson = JSON.toJSONString(socketRequest);
-//                        requestJson = requestJson + String.valueOf(c);
-//                        SocketConnect.send(requestJson);
-//                        saveDataForResult(listBean, timerUtils, 0, null);
-//                    } else {
-//                        saveDataForResult(listBean, timerUtils, 1, null);
-//                    }
-//                }
+                String keyword = smsverify.getKeyword();
+                int length = smsverify.getLength();
+                Log.i("sore", "短信验证码");
+                Long currentTime = 0L;// 当前时间计时
+                boolean isTimeOut = false;//是否超时
+                String content = null;
+                while (!isTimeOut) {
+                    Thread.sleep(1000 * 10);
+                    currentTime += 1000 * 10;
+                    SMSInfo smsInfo = getFirstSmsInfo(context);
+                    if (smsInfo != null) {
+                        content = smsInfo.getContent();
+                        isTimeOut = true;
+                    }
+                    if (currentTime > 1000 * 60) {
+                        saveDataForResult(listBean, timerUtils, 1, null);
+                        throw new TaskException("验证码超时");
+                    }
+                }
+                String[] split = content.split(keyword);
+                content = split[1].substring(0, length + 1);
+                timerUtils.startTime();
+                //取出操作对象
+                paramValue = extratTarget(paramValue).get(VALUE);
+                params = new Parameters("id", paramValue, "", "", false);
+                socketRequest = new SocketRequest("action", "find", params);
+                requestJson = JSON.toJSONString(socketRequest);
+                requestJson = requestJson + String.valueOf(c);
+                scriptResult = SocketConnect.send(requestJson);
+                if (scriptResult.contains("status")) {
+                    JSONObject jsonObject = (JSONObject) JSON.parse(scriptResult);
+                    int status = (int) jsonObject.get("status");
+                    if (status == 0) {
+                        JSONObject value1 = (JSONObject) jsonObject.get("value");
+                        String elementid = (String) value1.get("ELEMENT");
+                        params = new Parameters(elementid, content, false, true);
+                        socketRequest = new SocketRequest("action", "element:setText", params);
+                        requestJson = JSON.toJSONString(socketRequest);
+                        requestJson = requestJson + String.valueOf(c);
+                        SocketConnect.send(requestJson);
+                        saveDataForResult(listBean, timerUtils, 0, null);
+                    } else {
+                        saveDataForResult(listBean, timerUtils, 1, null);
+                    }
+                }
 
                 break;
             case 9: //停止APP
@@ -506,6 +502,7 @@ public class AppWorkRunnable implements Runnable {
         taskResultDetail.setSingleStepBeginTime(timerUtils.getStartTimeStr());
         taskResultDetail.setSingleStepEndTime(timerUtils.getEndTimeStr());
         taskResultDetail.setResultScreenShot(resultScreenShot);
+        taskResultDetail.setId(listBean.getId());
         if (result == 0) {
             taskResultDetail.setRunningResult("操作成功");
             mTaskResultDetailDao.save(taskResultDetail);

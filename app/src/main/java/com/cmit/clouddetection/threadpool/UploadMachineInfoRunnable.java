@@ -11,17 +11,21 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.BatteryManager;
+
 import android.support.v4.app.ActivityCompat;
-
-
+import android.util.Log;
 import com.cmit.clouddetection.R;
 import com.cmit.clouddetection.bean.MachineInfo;
 import com.cmit.clouddetection.bean.PhoneInfo;
 
+import com.cmit.clouddetection.contstant.HttpContstant;
 import com.cmit.clouddetection.utils.SystemUtils;
 import com.google.gson.Gson;
-
-
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.RequestMethod;
+import com.yanzhenjie.nohttp.rest.OnResponseListener;
+import com.yanzhenjie.nohttp.rest.Response;
+import com.yanzhenjie.nohttp.rest.StringRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +54,31 @@ public class UploadMachineInfoRunnable implements Runnable {
         machineInfo.setAppVersion(getVersionCode());
         machineInfo.setType(android.os.Build.BRAND + " " + android.os.Build.MODEL);
         machineInfo.setInstalledSoftInfo(new Gson().toJson(getInstalledApps()));
+        StringRequest stringRequest = new StringRequest(HttpContstant.URL + HttpContstant.UPLOADMACHINE, RequestMethod.POST);
+        String result = new Gson().toJson(machineInfo);
+        stringRequest.setDefineRequestBodyForJson(result);
+
+        NoHttp.newRequestQueue().add(3, stringRequest, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+                Log.i("sore", "onFailed");
+            }
+
+            @Override
+            public void onFinish(int what) {
+                Log.i("sore", "onFinish");
+            }
+        });
+
 
     }
 
